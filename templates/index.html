@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Incio de Sesion</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/index.css">
+</head>
+
+<body>
+    <div class="login-container">
+        <div class="image-container">
+            <img src="https://th.bing.com/th/id/OIP.sOJ3OHUOvI2iJjphUTSLLAHaHa?w=173&h=180&c=7&r=0&o=5&pid=1.7"
+                alt="Imagen de Mecánica">
+        </div>
+        <div class="login-form">
+            <form action="/index" method="POST">
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Usuario</label>
+                    <input type="text" name="usuario" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                        placeholder="Ingresa tu correo">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputPassword1">Contraseña</label>
+                    <input type="password"  name="contraseña" class="form-control" id="exampleInputPassword1" placeholder="Contraseña">
+                </div>
+                <button type="submit" class="btn btn-primary">Ingresar</button>
+                {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                <div class="alert alert-danger" role="alert">
+                    {{ messages[0] }}
+                </div>
+                {% endif %}
+                {% endwith %}
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>
