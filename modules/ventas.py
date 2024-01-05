@@ -1,7 +1,7 @@
 class Ventas:
     def __init__(self, usuario,cliente,marca,categoria,precio,cambio):
-        self.cliente=cliente
         self.usuario=usuario
+        self.cliente=cliente
         self.marca=marca
         self.categoria=categoria
         self.precio = precio
@@ -9,11 +9,11 @@ class Ventas:
 
     def VentaDBCollection(self):
         return{
+            'usuario':self.usuario,
+            'cliente':self.cliente,
             'marca':self.marca,
             'categoria':self.categoria,
-            'usuario':self.usuario,
-            'cambio':self.cambio,
-            'cliente':self.cliente,
-            'precio':self.precio
+            'precio':self.precio,
+            'cambio':self.cambio
 
         }

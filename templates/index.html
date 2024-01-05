@@ -24,7 +24,6 @@
                     <label for="exampleInputPassword1">Contraseña</label>
                     <input type="password"  name="contraseña" class="form-control" id="exampleInputPassword1" placeholder="Contraseña">
                 </div>
-                <button type="submit" class="btn btn-primary">Ingresar</button>
                 {% with messages = get_flashed_messages() %}
                 {% if messages %}
                 <div class="alert alert-danger" role="alert">
@@ -32,6 +31,8 @@
                 </div>
                 {% endif %}
                 {% endwith %}
+                <button type="submit" class="btn btn-primary">Ingresar</button>
+                <a  href="{{url_for('login')}}" class="btn btn-primary">Registrarse</a>
             </form>
         </div>
     </div>

@@ -1,15 +1,15 @@
 class Clientes:
-    def __init__(self, cedula, nombre,codigo,direccion):
-        self.cedula = cedula
-        self.codigo = codigo
-        self.direccion = direccion
+    def __init__(self,nombre,cedula,direccion):
         self.nombre = nombre
+        self.cedula = cedula
+        self.direccion = direccion
+        
 
     def ClientDBCollection(self):
         return{
-            'codigo': self.codigo,
             'nombre': self.nombre,
+            'cedula':self.cedula,
             'direccion':self.direccion,
-            'cedula':self.cedula
+            
             
         }

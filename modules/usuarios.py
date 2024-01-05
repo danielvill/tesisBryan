@@ -1,17 +1,16 @@
 class Usuario:
-    def __init__(self, cedula, nombre,rol,correo,contraseña):
-        self.correo = correo
+    def __init__(self, cedula, usuario,rol,correo,contraseña):
         self.cedula = cedula
+        self.usuario = usuario
         self.rol = rol
+        self.correo = correo        
         self.contraseña = contraseña
-        self.nombre = nombre
 
     def UserDBCollection(self):
         return{
-            'correo': self.correo,
-            'nombre': self.nombre,
+            'cedula':self.cedula,
+            'usuario': self.usuario,
             'rol':self.rol,
-            'contraseña':self.contraseña,
-            'cedula':self.cedula
-            
+            'correo': self.correo,
+            'contraseña':self.contraseña,    
         }
