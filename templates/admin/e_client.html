@@ -1,4 +1,36 @@
 {% extends "admin/layout.html" %}
 {% block content %}
 
+{% for client in clientes %}
+<form action="/edit_cli/{{client.nombre}}" method="POST">
+    <div class="container">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="">Nombre</th>
+                    <th>Direccion</th>
+                    <th>Cedula o Ruc</th>
+                </tr>
+            </thead>
+            <tbody>
+                <th>
+                    <input type="text" class="form-control"  value="{{client.nombre}}" name="nombre" placeholder="Nombre">
+                </th>
+                <th>
+                    <input type="text" class="form-control"  value="{{client.direccion}}" name="direccion" placeholder="Direccion">
+                </th>
+                <th>
+                    <input type="number" class="form-control" id="miInput" value="{{client.cedula}}" name="cedula" oninput="limitarEntrada()" placeholder="Cedula o Ruc">
+                </th>
+            </tbody>
+        </table>
+        <button type="submit" type="submit" class="btn btn-primary"> Editar</button>
+        <a href="{{url_for('elitcl',client_name=client.nombre)}}"class="btn btn-danger ">Eliminar</a>
+    </div>
+    
+</form>
+
+<script src="/static/js/cedula.js"></script>
+{% endfor %}
+
 {% endblock %}

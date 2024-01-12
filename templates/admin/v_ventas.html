@@ -1,0 +1,26 @@
+{% extends "admin/layout.html" %}
+{% block content %}
+
+<div class="container">
+    <h1>
+        {% for usuario, total_ventas in usuarios_ordenados %}
+        <div>
+            <table class="table">
+                <th>
+                    <tr><h2>
+                        {{ usuario }}
+                    </h2></tr>
+                    <br>
+                    <tr>
+                    <h3>Total: {{ total_ventas }}</h3>
+                    </tr>
+                </th>
+            </table>
+        </div>
+        
+        
+        {% endfor %}
+    </h1>
+</div>
+
+{% endblock %}

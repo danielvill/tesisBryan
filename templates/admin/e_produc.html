@@ -1,4 +1,51 @@
 {% extends "admin/layout.html" %}
 {% block content %}
+{% for producto in productos %}
+<form action="/edit_prod/{{producto.codigo}}" method="POST">
+    <br>
+    <div class="container">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        Codigo
+                    </th>
+                    <th>
+                        Marca
+                    </th>
+                    <th>
+                        Categoria
+                    </th>
+                    <th>
+                        Cantidad
+                    </th>
+                    <th>
+                        Precio
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <th>
+                    <input type="text" class="form-control"  value="{{producto.codigo}}" name="codigo" placeholder="Codigo">
+                </th>
+                <th>
+                    <input type="text" class="form-control"  value="{{producto.marca}}" name="marca" placeholder="Marca">
+                </th>
+                <th>
+                    <input type="text" class="form-control"  value="{{producto.categoria}}" name="categoria" placeholder="Categoria">
+                </th>
+                <th>
+                    <input type="number" class="form-control" id="miInput" value="{{producto.cantidad}}" name="cantidad" oninput="limitarEntrada()" placeholder="Cantidad">
+                </th>
+                <th>
+                    <input type="number" class="form-control" id="miInput" value="{{producto.precio}}" name="precio" oninput="limitarEntrada()" placeholder="Precio">
+                </th>
+            </tbody>
 
+        </table> 
+        <button type="submit" type="submit" class="btn btn-primary"> Editar</button>
+        <a href="{{url_for('eliproduc', prod_codigo=producto.codigo)}}"class="btn btn-danger ">Eliminar</a>
+    </div>
+</form>
+{% endfor %}
 {% endblock %}

@@ -2,23 +2,24 @@
 {% block content %}
 
 <div class="form-container">
-    <form>
-        <div class="form-group">
-            <input type="text" class="form-control" placeholder="Marca">
-            <input type="text" class="form-control" placeholder="Caja o Sarta">
-            <input type="text" class="form-control" placeholder="Cantidad">
-            <input type="text" class="form-control" placeholder="Precio">
-            <input type="text" class="form-control" placeholder="Distribuidor">
-            <input type="text" class="form-control" placeholder="Comentarios">
+    <br>
+    <form action="/admin/producto" method="post">
+        <div class="container">
+            <input type="number" name="codigo" class="form-control" id="exampleFormControlInput1" placeholder="Codigo">
+            <br>
+            <input type="text" name="marca" class="form-control" id="exampleFormControlInput1" placeholder="Marca">
+            <br>
+            <input type="text"  name="categoria" class="form-control" id="exampleFormControlInput1" placeholder="Categoria">
+            <br>
+            <input type="number" name="cantidad" class="form-control" id="exampleFormControlInput1" placeholder="Cantidad">
+            <br>
+            <input type="money" name="precio" class="form-control" id="exampleFormControlInput1" placeholder="Precio">
+            <br>
+            <button type="submit" class="btn btn-primary">Enviar</button>
         </div>
-        <button type="submit" class="btn btn-primary">Enviar</button>
     </form>
+    
+  
 </div>
-
-
-
-
-
-
 
 {% endblock %}

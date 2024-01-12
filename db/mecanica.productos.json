@@ -1,0 +1,20 @@
+[{
+  "_id": {
+    "$oid": "65a00cb25b4f277e1a15957b"
+  },
+  "codigo": "424",
+  "marca": "Yamaha",
+  "categoria": "pernoss",
+  "cantidad": "13",
+  "precio": "23.5"
+},
+{
+  "_id": {
+    "$oid": "65a06db94a31a7145c2eba01"
+  },
+  "codigo": "58",
+  "marca": "Hyundai",
+  "categoria": "Pernos",
+  "cantidad": "50",
+  "precio": "23"
+}]

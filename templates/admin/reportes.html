@@ -1,4 +1,25 @@
 {% extends "admin/layout.html" %}
 {% block content %}
+<br>
 
+<div class="container">
+    <h1>
+        {% for fecha in fechas %}
+        <div >
+            <table class="table">
+                <th>
+                    <tr>{{ fecha }}</tr>
+                    <br>
+                    <tr> <p>Total</p>
+                        {{ sumas[fecha] }}
+                    </tr>
+                </th>
+
+            </table>
+
+        </div>
+           
+        {% endfor %}
+    </h1>
+</div>
 {% endblock %}

@@ -1,0 +1,10 @@
+[{
+  "_id": {
+    "$oid": "65980a065998f6f645a8130d"
+  },
+  "cedula": "0704473230",
+  "usuario": "Bryan",
+  "rol": "usuario",
+  "email": "bryan@gmail.com",
+  "contraseña": "458"
+}]

@@ -1,0 +1,60 @@
+[{
+  "_id": {
+    "$oid": "65a0590846f2ad1f10542754"
+  },
+  "usuario": "Bryan",
+  "cliente": "Carlos",
+  "marca": "Yamaha4512",
+  "categoria": "Llantas",
+  "precio": "5",
+  "cambio": "27",
+  "fecha": "2024-01-23"
+},
+{
+  "_id": {
+    "$oid": "65a05a5d9b66e6be6db1393b"
+  },
+  "usuario": "Bryan Caracundo",
+  "cliente": "Carlos",
+  "marca": "Yamaha",
+  "categoria": "Llantas",
+  "precio": "5",
+  "cambio": "6",
+  "fecha": "2024-01-17"
+},
+{
+  "_id": {
+    "$oid": "65a05df381f2ee31938ea51c"
+  },
+  "usuario": "Bryan Caracundo",
+  "cliente": "Carlos",
+  "marca": "Yamaha4512",
+  "categoria": "Llantas",
+  "precio": "52",
+  "cambio": "52",
+  "fecha": "2024-01-01"
+},
+{
+  "_id": {
+    "$oid": "65a05e0381f2ee31938ea51d"
+  },
+  "usuario": "Martha",
+  "cliente": "Carlos",
+  "marca": "Yamaha4512",
+  "categoria": "Llantas",
+  "precio": "512",
+  "cambio": "180",
+  "fecha": "2024-02-01"
+},
+{
+  "_id": {
+    "$oid": "65a06dd24a31a7145c2eba02"
+  },
+  "usuario": "Bryan",
+  "cliente": "Leonardo",
+  "marca": "Hyundai",
+  "categoria": "Pernos",
+  "precio": "6",
+  "cambio": "9",
+  "fecha": "2024-01-25"
+}]

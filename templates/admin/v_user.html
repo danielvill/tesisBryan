@@ -1,4 +1,43 @@
 {% extends "admin/layout.html" %}
 {% block content %}
 
+{% for visuser in usuarios %}
+<form action="">
+   <div class="container">
+      <table>
+         <thead>
+            <tr>
+               <th>Cedula</th>
+               <th scope="">Nombre</th>
+               <th>Rol</th>
+               <th>Correo</th>
+               <th>Contraseña</th>
+            </tr>
+         </thead>
+         <tbody>
+            <th>
+               <input type="number" class="form-control" id="miInput" value="{{visuser.cedula}}" name="cedula" oninput="limitarEntrada()" placeholder="Cedula o Ruc">
+            </th>
+            <th>
+               <input type="text" class="form-control"  value="{{visuser.usuario}}" name="nombre" placeholder="Nombre">
+            </th>
+            <th>
+               <input type="text" class="form-control"  value="{{visuser.rol}}" name="rol" placeholder="Rol">
+            </th>
+            <th>
+               <input type="text" class="form-control"  value="{{visuser.correo}}" name="correo" placeholder="Correo">
+            </th>
+            <th>
+               <input type="password" class="form-control" id="exampleFormControlInput1" value="{{visuser.contraseña}}" name="contraseña" placeholder="Password">
+            </th>
+         </tbody>
+      </table>
+      <button type="submit" class="btn btn-primary"> Editar</button>
+      <a href="{{url_for('elitcl',client_name=visuser.usuario)}}"class="btn btn-danger ">Eliminar</a>
+      
+   </div>
+</form>
+<script src="/static/js/cedula.js"></script>
+{% endfor %}
+
 {% endblock %}

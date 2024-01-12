@@ -1,0 +1,16 @@
+[{
+  "_id": {
+    "$oid": "65a00b9de092314250843735"
+  },
+  "nombre": "Kevinm",
+  "cedula": "2314551251",
+  "direccion": "Macehala"
+},
+{
+  "_id": {
+    "$oid": "65a06d974a31a7145c2eba00"
+  },
+  "nombre": "Leonardo",
+  "cedula": "0704578941",
+  "direccion": "Santa Rosa y Junin y 8 va norte"
+}]

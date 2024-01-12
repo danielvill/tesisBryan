@@ -1,5 +1,26 @@
 {% extends "admin/layout.html" %}
 {% block content %}
 
+<div class="form-container">
+    <br>
+<form action="/admin/clientes" method="post">
+    <div class="container">
+        
+        <input type="number" class="form-control" id="exampleFormControlInput1" placeholder="Codigo">
+        <br>
+        <input type="text" class="form-control" id="exampleFormControlInput1" name="nombre" placeholder="Nombre">
+        <br>
+        <input type="text" class="form-control" id="exampleFormControlInput1" name="direccion" placeholder="Direccion">
+        <br>
+        <input type="number" class="form-control" id="miInput" oninput="limitarEntrada()" name="cedula" placeholder="Cedula o Ruc">
+        <br>
+        <button type="submit" class="btn btn-primary"> Enviar</button>
+    </div>
 
+   
+</form>
+</div>
+
+<script src="/static/js/cedula.js">
+</script>
 {% endblock %}
