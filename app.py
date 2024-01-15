@@ -7,6 +7,7 @@ from modules.usuarios import Usuario
 from modules.ventas import Ventas
 from datetime import datetime
 from collections import defaultdict
+from babel.dates import format_date 
 
 db = dbase()
 
@@ -39,7 +40,7 @@ def index():
 
 #Login registro de usuarios
 
-@app.route('/login',methods=['GET','POST'])
+@app.route('/admin/in_mecanicos',methods=['GET','POST'])
 def login():
     if request.method =='POST': 
         registrar =db["usuarios"]
@@ -52,11 +53,11 @@ def login():
         if cedula and usuari and roles and email and contra:
             registr= Usuario(cedula,usuari,roles,email,contra)
             registrar.insert_one(registr.UserDBCollection())
-            return redirect(url_for ('index'))
+            return redirect(url_for ('login'))
         else:
             return "No se encontro la pagina"
     else:
-        return render_template('login.html')
+        return render_template('admin/in_mecanicos.html')
 
 #Administrador modulo de ingresado de clientes
 @app.route('/admin/clientes',methods=['GET','POST'])
@@ -254,40 +255,42 @@ def v_ventas():
     # Iterar sobre las ventas y sumar las cantidades por usuario
     for venta in ventas:
         usuario = venta['usuario']
-        cantidad = float(venta['cambio'])  # Convertir el valor de 'cambio' a float
+        cantidad = float(venta['cambio'])
+        fecha = venta ["fecha"]  
+
+        # Convertir la fecha a formato español
+        fecha = datetime.strptime(fecha, "%Y-%m-%d")
+        fecha_es = format_date(fecha, 'MMMM yyyy', locale='es_ES')
 
         # Verificar si el usuario ya está en el diccionario
         if usuario in ventas_por_usuario:
-            ventas_por_usuario[usuario] += cantidad
+            ventas_por_usuario[usuario]['ventas'] += cantidad
+            ventas_por_usuario[usuario]['fecha'] = fecha_es
         else:
-            ventas_por_usuario[usuario] = cantidad
+            ventas_por_usuario[usuario] = {'ventas': cantidad, 'fecha': fecha_es}
 
     # Ordenar los usuarios por la cantidad de ventas en orden descendente
-    usuarios_ordenados = sorted(ventas_por_usuario.items(), key=lambda x: x[1], reverse=True)
+    usuarios_ordenados = sorted(ventas_por_usuario.items(), key=lambda x: x[1]['ventas'], reverse=True)
 
     # Renderizar la plantilla 'admin/v_ventas.html' con los datos necesarios
     return render_template('admin/v_ventas.html', usuarios_ordenados=usuarios_ordenados)
 
-
-
-
 # ---------Carpeta Usuarios------------------------------
-
-
 #Carpetas Usuarios
 
 #Ingresado de Clientes los mecanicos
 @app.route('/usuarios/clientes')
 def useclient():
-    clientes= db['clientes']
-    nombre= request.form["nombre"]
-    cedula= request.form["cedula"]
-    direccion=request.form["direccion"]
-
-    if nombre and cedula and direccion:
-        regcli= Clientes(nombre,cedula,direccion)
-        clientes.insert_one(regcli.ClientDBCollection())
-        return redirect(url_for("usuarios/clientes.html"))
+    if request.method == 'POST':
+        clientes= db['clientes']
+        nombre= request.form["nombre"]
+        cedula= request.form["cedula"]
+        direccion=request.form["direccion"]
+    
+        if nombre and cedula and direccion:
+            regcli= Clientes(nombre,cedula,direccion)
+            clientes.insert_one(regcli.ClientDBCollection())
+            return redirect(url_for("usuarios/clientes.html"))
     return render_template('usuarios/clientes.html')
 
 #Editado de Clientes de los mecanicos
@@ -302,7 +305,7 @@ def editcluse(client_name):
         
         if nombre and cedula and direccion:
             clientes.update_one({'nombre':client_name},{'$set':{'nombre':nombre,'cedula':cedula,'direccion':direccion}})
-            return redirect(url_for('usuarios/e_client.html'))
+            return redirect(url_for('vuse_cliente'))
     else:
         return redirect(url_for('usuarios/e_client.html'))    
 
@@ -310,31 +313,30 @@ def editcluse(client_name):
 #Carpetas Usuarios para mostrar los clientes 
 @app.route('/usuarios/e_client')
 def vuse_cliente():
-    cliente = db.cliente.find()
-    return render_template('usuarios/e_client.html', cliente=cliente)
+    cliente = db.clientes.find()
+    return render_template('usuarios/e_client.html', clientes=cliente)
 
 
 
 #Carpetas Usuarios Ingresado de Productos 
 
-@app.route('/usuarios/producto')
+@app.route('/usuarios/producto', methods=['GET', 'POST'])
 def usedproduc():
-    producto= db.product["productos"]
-    codigo=request.form["codigo"]
-    marca=request.form["marca"]
-    categoria=request.form["categoria"]
-    cantidad=request.form["cantidad"]
-    precio=request.form["precio"]
-    
-    if codigo and marca and categoria and cantidad and precio:
-        regpro= Productos(codigo,marca,categoria,cantidad,precio)
-        producto.insert_one(regpro.ProduDBCollection())
-        return redirect(url_for('usuarios/producto.html'))                        
-    else:
-        return print("No se mando nada a la base de datos")
+    if request.method == 'POST':     
+        producto= db.product["productos"]
+        codigo=request.form["codigo"]
+        marca=request.form["marca"]
+        categoria=request.form["categoria"]
+        cantidad=request.form["cantidad"]
+        precio=request.form["precio"]
+        if codigo and marca and categoria and cantidad and precio:
+            regpro= Productos(codigo,marca,categoria,cantidad,precio)
+            producto.insert_one(regpro.ProduDBCollection())
+            return redirect(url_for('usedproduc'))                        
+    return render_template('usuarios/producto.html')
 
-# Carpeta de vistado de productos 
-@app.route('/useedit_prod/<string:prod_codigo>')
+# Carpeta de vistado de productos y editado de productos
+@app.route('/useedit_prod/<string:prod_codigo>', methods=['GET', 'POST'])
 def useediproduc(prod_codigo):
     producto =db['productos']
     if request.method == 'POST':
@@ -343,20 +345,18 @@ def useediproduc(prod_codigo):
         categoria=request.form["categoria"]
         cantidad=request.form["cantidad"]
         precio=request.form["precio"]
-        
         if codigo and marca and categoria and cantidad and precio:
             producto.update_one({'codigo':prod_codigo},{'$set':{'codigo':codigo,'marca':marca,'categoria':categoria,'cantidad':cantidad,'precio':precio}})
-            return redirect(url_for('usuarios/e_product.html'))
-        
+            return redirect(url_for('vuse_producto'))
     else:
-        return print("No se mando nada a la base de datos")
+        return render_template('usuarios/e_produc.html')
 
     
 #Carpeta vista de productos
-@app.route('/usuarios/e_product')
+@app.route('/usuarios/e_produc')
 def vuse_producto():
     producto = db.productos.find()
-    return render_template('usuarios/e_product.html', producto=producto)    
+    return render_template('usuarios/e_produc.html', productos=producto)    
 
 
 if __name__ == '__main__':

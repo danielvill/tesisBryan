@@ -1,0 +1,43 @@
+{
+    "Usuarios": [
+        {
+            "cedula": "045236",
+            "nombre": "Bryan",
+            "rol": "Usuario",
+            "email": "bryan@gmail.com",
+            "clave": "458"
+        }
+    ],
+    "Clientes":
+    [
+        {
+            
+            "nombre":"Mercedes Quezada",
+            "direccion":"santa rosa",
+            "cedula o ruc":"0754668"
+        }
+    ],
+    "Productos":
+    [
+        {
+            "codigo":"9283",
+            "marca":"yamaha",
+            "categoria":"pernos",
+            "cantidad":"8",
+            "precio":"2.50"
+        }
+    ],
+    "Ventas":
+    [
+        {
+            "usuario":"nombre",
+            "cliente":"Mercedes Quezada",
+            "marca":"yamaha",
+            "categoria":"pernos",
+            "precio":"2.50",
+            "cambio":"3.50"
+        }
+    ]
+    
+}
+

@@ -2,10 +2,10 @@
   "_id": {
     "$oid": "65a00cb25b4f277e1a15957b"
   },
-  "codigo": "424",
-  "marca": "Yamaha",
-  "categoria": "pernoss",
-  "cantidad": "13",
+  "codigo": "45",
+  "marca": "Suzuki",
+  "categoria": "pernos23",
+  "cantidad": "134",
   "precio": "23.5"
 },
 {

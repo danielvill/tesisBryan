@@ -1,24 +1,28 @@
 {% extends "usuarios/layout.html" %}
 {% block content %}
 
+
+
 <div class="form-container">
-    <form>
-        <div class="form-group">
+    <form action="/usuarios/producto" method="post">
+        <div class="container">
             <input type="text" class="form-control" placeholder="Marca">
+            <br>
             <input type="text" class="form-control" placeholder="Caja o Sarta">
+            <br>
             <input type="text" class="form-control" placeholder="Cantidad">
+            <br>
             <input type="text" class="form-control" placeholder="Precio">
+            <br>
             <input type="text" class="form-control" placeholder="Distribuidor">
+            <br>
             <input type="text" class="form-control" placeholder="Comentarios">
+
+            <br>
+            <button type="submit" class="btn btn-primary">Enviar</button>
         </div>
-        <button type="submit" class="btn btn-primary">Enviar</button>
     </form>
 </div>
-
-
-
-
-
 
 
 {% endblock %}

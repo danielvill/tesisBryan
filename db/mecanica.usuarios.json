@@ -7,4 +7,14 @@
   "rol": "usuario",
   "email": "bryan@gmail.com",
   "contraseña": "458"
+},
+{
+  "_id": {
+    "$oid": "65a590fa112adc33f62f454e"
+  },
+  "cedula": "0705596321",
+  "usuario": "Elias Serrano",
+  "rol": "Mecanico",
+  "correo": "elias@hotmail.com",
+  "contraseña": "elia123"
 }]
