@@ -3,23 +3,28 @@
 <br>
 
 <div class="container">
-    <h1>
+    <table id="example" class="display" style="width:100%">
+    
+    
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Total</th>
+            </tr>
+        </thead>
         {% for fecha in fechas %}
-        <div >
-            <table class="table">
-                <th>
-                    <tr>{{ fecha }}</tr>
-                    <br>
-                    <tr> <p>Total</p>
-                        {{ sumas[fecha] }}
-                    </tr>
-                </th>
-
-            </table>
-
-        </div>
-           
-        {% endfor %}
-    </h1>
+        <tbody>
+            <tr>
+                
+                <td>{{ fecha }}</td>
+                <td>{{ sumas[fecha] }}</td>
+            </tr>
+        </tbody>
+    
+    {% endfor %}
+</table>
 </div>
+<script>
+new DataTable('#example');
+</script>
 {% endblock %}

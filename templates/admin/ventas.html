@@ -3,10 +3,11 @@
 
 <div class="form-container">
     <br>
+    <h1 style="text-align: center;">Ingresado de Ventas</h1>
     <form action="/admin/ventas" method="POST">
         <div class="container">
         <label for="" class="form-control"> Usuario
-            <select  name="usuario"> 
+            <select  name="usuario" > 
                 {% for usuario in usuarios %}
                 <option value="{{ usuario }}">{{ usuario }}</option>
                 {% endfor %}
@@ -50,4 +51,7 @@
     
 </form>
 
+<script>$(document).ready(function() {
+    $('select').select2();
+});</script>
 {% endblock %}

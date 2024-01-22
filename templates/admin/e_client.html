@@ -1,36 +1,65 @@
 {% extends "admin/layout.html" %}
 {% block content %}
-
-{% for client in clientes %}
-<form action="/edit_cli/{{client.nombre}}" method="POST">
-    <div class="container">
+<div class="container">
+    <div class="input-group flex-nowrap">
+        <span class="input-group-text" id="addon-wrapping">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                class="bi bi-search" viewBox="0 0 16 16">
+                <path
+                    d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+            </svg>
+        </span>
+        <input type="search" id="filtro" class="form-control" placeholder="Busqueda" aria-label="Username"
+            aria-describedby="addon-wrapping">
+    </div>
+    {% for client in clientes %}
+    <form action="/edit_cli/{{client.nombre}}" method="POST">
         <table class="table">
             <thead>
                 <tr>
                     <th scope="">Nombre</th>
                     <th>Direccion</th>
                     <th>Cedula o Ruc</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
-            <tbody>
-                <th>
-                    <input type="text" class="form-control"  value="{{client.nombre}}" name="nombre" placeholder="Nombre">
-                </th>
-                <th>
-                    <input type="text" class="form-control"  value="{{client.direccion}}" name="direccion" placeholder="Direccion">
-                </th>
-                <th>
-                    <input type="number" class="form-control" id="miInput" value="{{client.cedula}}" name="cedula" oninput="limitarEntrada()" placeholder="Cedula o Ruc">
-                </th>
+            <tbody data-nombre="{{ client.nombre }}">
+                <tr>
+                    <td>
+                        <input type="text" class="form-control" value="{{client.nombre}}" name="nombre"
+                            placeholder="Nombre">
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" value="{{client.direccion}}" name="direccion"
+                            placeholder="Direccion">
+                    </td>
+                    <td>
+                        <input type="number" class="form-control" id="miInput" value="{{client.cedula}}"
+                            name="cedula" oninput="limitarEntrada()" placeholder="Cedula o Ruc">
+                    </td>
+                    <td>
+                        <button class="btn btn-primary" type="submit">Editar</button>
+                        <a href="{{url_for('elitcl',client_name=client.nombre)}}" class="btn btn-danger">Eliminar</a>
+                    </td>
+                </tr>
             </tbody>
         </table>
-        <button type="submit" type="submit" class="btn btn-primary"> Editar</button>
-        <a href="{{url_for('elitcl',client_name=client.nombre)}}"class="btn btn-danger ">Eliminar</a>
-    </div>
-    
-</form>
+    </form>
+    {% endfor %}
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        $("#filtro").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("tbody[data-nombre]").filter(function () {
+                $(this).parent().toggle($(this).data("nombre").toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+</script>
 
 <script src="/static/js/cedula.js"></script>
-{% endfor %}
 
 {% endblock %}

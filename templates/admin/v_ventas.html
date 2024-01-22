@@ -3,20 +3,26 @@
 
 <div class="container">
     <h1>Ventas por Mecánico</h1>
-    <table class="table">
+    <table id="example" class="display" style="width:100%">
+        <thead>
         <tr>
             <th>Mecánico</th>
             <th>Ventas</th>
             <th>Fecha</th>
         </tr>
+    </thead>
+    <tbody>
         {% for usuario, datos in usuarios_ordenados %}
         <tr>
             <td>{{ usuario }}</td>
             <td>{{ datos['ventas'] }}</td>
             <td>{{ datos['fecha'] }}</td>
         </tr>
+    </tbody>
         {% endfor %}
     </table>
 </div>
-
+<script>
+    new DataTable('#example');
+    </script>
 {% endblock %}
