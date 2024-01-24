@@ -1,26 +1,45 @@
 {% extends "admin/layout.html" %}
 {% block content %}
-
 <div class="form-container">
     <h1 style="text-align: center;">Ingresado de Productos</h1>
     <br>
     <form action="/admin/producto" method="post">
         <div class="container">
-            <input type="number" name="codigo" class="form-control" id="exampleFormControlInput1" placeholder="Codigo">
+            <input type="number" name="codigo" class="form-control"  placeholder="Codigo">
             <br>
-            <input type="text" name="marca" class="form-control" id="exampleFormControlInput1" placeholder="Marca">
+            <input type="text" name="marca" class="form-control"  placeholder="Marca">
             <br>
-            <input type="text"  name="categoria" class="form-control" id="exampleFormControlInput1" placeholder="Categoria">
+            <input type="text" name="categoria" class="form-control" 
+                placeholder="Categoria">
             <br>
-            <input type="number" name="cantidad" class="form-control" id="exampleFormControlInput1" placeholder="Cantidad">
+            <input type="number" name="cantidad" class="form-control" 
+                placeholder="Cantidad">
             <br>
-            <input type="money" name="precio" class="form-control" id="exampleFormControlInput1" placeholder="Precio">
+            <input type="number" name="precio" class="form-control"  placeholder="Precio">
             <br>
             <button type="submit" class="btn btn-primary">Enviar</button>
         </div>
     </form>
-    
-  
 </div>
-
+<script>
+    window.onload = function () {
+        // Validación de campos vacíos
+        document.querySelector('form').onsubmit = function(e) {
+            var inputs = this.querySelectorAll('input');
+            for (var i = 0; i < inputs.length; i++) {
+                if (inputs[i].value === '') {
+                    e.preventDefault();
+                    alert('Llene todos los campos');
+                    return;
+                }
+                else 
+                {
+                    alert('Guardado en la base de datos');
+                    return;
+                }
+                
+            }
+        }
+    }
+</script>
 {% endblock %}

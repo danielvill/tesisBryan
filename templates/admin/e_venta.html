@@ -1,28 +1,27 @@
 {% extends "admin/layout.html" %}
 {% block content %}
-
-
 <div class="container">
-
     <div class="input-group flex-nowrap">
         <span class="input-group-text" id="addon-wrapping">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                class="bi bi-search" viewBox="0 0 16 16">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search"
+                viewBox="0 0 16 16">
                 <path
                     d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
             </svg>
         </span>
         <input type="search" id="filtro" class="form-control" placeholder="Busqueda" aria-label="Username"
             aria-describedby="addon-wrapping">
-    </div>
-
-    {% for producto in productos %}
-    <form action="/edit_prod/{{producto.codigo}}" method="POST">
-        <table >
+</div>
+    {% for e_venta in ventas %}
+    <form action="/edit_venta/{{e_venta.usuario}}" method="POST">
+        <table class="table">
             <thead>
                 <tr>
                     <th>
-                        Codigo
+                        Usuario
+                    </th>
+                    <th>
+                        Cliente
                     </th>
                     <th>
                         Marca
@@ -31,52 +30,63 @@
                         Categoria
                     </th>
                     <th>
-                        Cantidad
+                        Precio
                     </th>
                     <th>
-                        Precio
+                        Cambio
+                    </th>
+                    <th>
+                        Fecha
                     </th>
                     <th>
                         Acciones
                     </th>
                 </tr>
             </thead>
-            <tbody data-marca="{{producto.marca}}">
+            <tbody data-usuario="{{e_venta.usuario}}">
                 <th>
-                    <input type="text" class="form-control"  value="{{producto.codigo}}" name="codigo" placeholder="Codigo">
+                    <input type="text" class="form-control" value="{{e_venta.usuario}}" name="usuario">
                 </th>
                 <th>
-                    <input type="text" class="form-control"  value="{{producto.marca}}" name="marca" placeholder="Marca">
+                    <input type="text" class="form-control" value="{{e_venta.cliente}}" name="cliente">
                 </th>
                 <th>
-                    <input type="text" class="form-control"  value="{{producto.categoria}}" name="categoria" placeholder="Categoria">
+                    <input type="text" class="form-control" value="{{e_venta.marca}}" name="marca">
                 </th>
                 <th>
-                    <input type="number" class="form-control"  value="{{producto.cantidad}}" name="cantidad"  placeholder="Cantidad">
+                    <input type="text" class="form-control" value="{{e_venta.categoria}}" name="categoria">
                 </th>
                 <th>
-                    <input type="number" class="form-control"  value="{{producto.precio}}" name="precio"  placeholder="Precio">
+                    <input type="text" class="form-control" value="{{e_venta.precio}}" name="precio">
+                </th>
+                <th>
+                    <input type="text" class="form-control" value="{{e_venta.cambio}}" name="cambio">
+                </th>
+                <th>
+                    <input type="text" class="form-control" value="{{e_venta.fecha}}" name="fecha">
                 </th>
                 <th><button type="submit" type="submit" class="editar btn btn-primary"> Editar</button>
-                    <a href="{{url_for('eliproduc', prod_codigo=producto.codigo)}}"class="eliminar btn btn-danger ">Eliminar</a></th>
+                    <a href="{{url_for('elive',venta_name=e_venta.usuario)}}"
+                        class="eliminar btn btn-danger ">Eliminar</a>
+                </th>
             </tbody>
 
-        </table> 
+        </table>
         {% endfor %}
-</form>
+    </form>
 </div>
 <script>
     $(document).ready(function () {
         $("#filtro").on("keyup", function () {
             var value = $(this).val().toLowerCase();
-            $("tbody[data-marca]").filter(function () {
-                $(this).parent().toggle($(this).data("marca").toLowerCase().indexOf(value) > -1)
+            $("tbody[data-usuario]").filter(function () {
+                $(this).parent().toggle($(this).data("usuario").toLowerCase().indexOf(value) > -1)
             });
         });
     });
 
-// Este es oara preguntar de la edicion y eliminacion
-   $(document).ready(function(){
+//  Este es oara preguntar de la edicion y eliminacion
+$(document).ready(function(){
   $(".editar").click(function(event){
     if(!confirm("¿Estás seguro de que quieres editar?")){
       event.preventDefault();
@@ -89,8 +99,5 @@
     }
   });
 });
-
-
 </script>
-
 {% endblock %}

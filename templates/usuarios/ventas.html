@@ -1,5 +1,77 @@
 {% extends "usuarios/layout.html" %}
 {% block content %}
+<div class="form-container">
+    <br>
+    <h1 style="text-align: center;">Ingresado de Ventas</h1>
+    <form action="/usuarios/ventas" method="POST">
+        <div class="container">
+        <label for="" class="form-control"> Usuario
+            <select  name="usuario" > 
+                {% for usuario in usuarios %}
+                <option value="{{ usuario }}">{{ usuario }}</option>
+                {% endfor %}
+            </select>
+        </label>   
+        </label>
+        <label for="" class="form-control"> Cliente
+            <select name="cliente">
+                {% for cliente in clientes %}
+                <option value="{{ cliente }}">{{ cliente }}</option>
+                {% endfor %}
+            </select>
+        </label>
+        <label for="" class="form-control"> Producto
+            <select name="marca">
+                {% for producto in productos %}
+                <option value="{{ producto }}">{{ producto }}</option>
+                {% endfor %}
+            </select>
+        </label>
+        <label for="" class="form-control" > Categoria
+            <select name="categoria">
+                {% for categoria in categorias %}
+                    <option value="{{ categoria }}">{{ categoria }}</option>
+                {% endfor %}
+            </select>
+        </label>
+        <label for="" class="form-control"> Precio de la Pieza
+            <input  type="number" name="precio">
+        </label>
+        <label for="" class="form-control"> Mano de Obra
+            <input type="number"  name="cambio">
+        </label>
+        <label for="" class="form-control">Fecha
+            <input type="date"  name="fecha">
+        </label>
+        <br>
+        <button type="submit" class="btn btn-primary">Enviar</button>
+    </div>
+    
+    
+    
+</form>
 
+<script>$(document).ready(function() {
+    $('select').select2();
+});
+// Validación de campos vacíos
+document.querySelector('form').onsubmit = function(e) {
+            var inputs = this.querySelectorAll('input');
+            let selects = this.querySelectorAll('select');
+            for (var i = 0; i <  selects,inputs.length; i++) {
+                if (inputs[i].value === ''){
+                    e.preventDefault();
+                    alert('Llene todos los campos');
+                    return;
+                }
+                else 
+                {
+                    alert('Guardado exitosamente');
+                    return;
+                }
+                
+            }
+        }
+</script>   
 
 {% endblock %}

@@ -53,5 +53,24 @@
 
 <script>$(document).ready(function() {
     $('select').select2();
-});</script>
+});
+// Validación de campos vacíos
+document.querySelector('form').onsubmit = function(e) {
+            var inputs = this.querySelectorAll('input');
+            let selects = this.querySelectorAll('select');
+            for (var i = 0; i <  selects,inputs.length; i++) {
+                if (inputs[i].value === ''){
+                    e.preventDefault();
+                    alert('Llene todos los campos');
+                    return;
+                }
+                else 
+                {
+                    alert('Guardado en la base de datos');
+                    return;
+                }
+                
+            }
+        }
+</script>
 {% endblock %}

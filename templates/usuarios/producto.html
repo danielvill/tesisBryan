@@ -4,25 +4,43 @@
 
 
 <div class="form-container">
+    <h1 style="text-align: center;">Ingresado de Productos</h1>
     <form action="/usuarios/producto" method="post">
         <div class="container">
-            <input type="text" class="form-control" placeholder="Marca">
+            <input type="number" class="form-control" name="codigo" placeholder="Codigo">
             <br>
-            <input type="text" class="form-control" placeholder="Caja o Sarta">
+            <input type="text" class="form-control" name="marca" placeholder="Marca">
             <br>
-            <input type="text" class="form-control" placeholder="Cantidad">
+            <input type="text" class="form-control" name="categoria" placeholder="Categoria">
             <br>
-            <input type="text" class="form-control" placeholder="Precio">
+            <input type="number" class="form-control" name="cantidad" placeholder="Cantidad">
             <br>
-            <input type="text" class="form-control" placeholder="Distribuidor">
-            <br>
-            <input type="text" class="form-control" placeholder="Comentarios">
-
+            <input type="number" class="form-control" name="precio" placeholder="Precio">
             <br>
             <button type="submit" class="btn btn-primary">Enviar</button>
         </div>
     </form>
 </div>
-
+<script>
+    window.onload = function () {
+        // Validación de campos vacíos
+        document.querySelector('form').onsubmit = function(e) {
+            var inputs = this.querySelectorAll('input');
+            for (var i = 0; i < inputs.length; i++) {
+                if (inputs[i].value === '') {
+                    e.preventDefault();
+                    alert('Llene todos los campos');
+                    return;
+                }
+                else 
+                {
+                    alert('Guardado en la base de datos');
+                    return;
+                }
+                
+            }
+        }
+    }
+</script>
 
 {% endblock %}

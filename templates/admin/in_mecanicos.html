@@ -2,8 +2,8 @@
 {% block content %}
 
 <div class="container">
-
-
+<h1 style="text-align: center;">Ingreso de Mecanicos</h1>
+<br>
     <div class="form-container">
         <form action="/admin/in_mecanicos" method="POST">
 
@@ -24,5 +24,32 @@
         </form>
     </div>
 </div>
+<script>
+    window.onload = function() {
+    document.getElementById('miInput').onchange = function() {
+        if (this.value.length !== 10) {
+            alert('Necesita 10 dígitos');
+            this.value = '';
+        }
+    }
+}
+
+document.querySelector('form').onsubmit = function(e) {
+            var inputs = this.querySelectorAll('input');
+            for (var i = 0; i < inputs.length; i++) {
+                if (inputs[i].value === '') {
+                    e.preventDefault();
+                    alert('Llene todos los campos');
+                    return;
+                }
+                else 
+                {
+                    alert('Guardado en la base de datos');
+                    return;
+                }
+                
+            }
+        }
+</script>
 <script src="/static/js/cedula.js"></script>
 {% endblock %}

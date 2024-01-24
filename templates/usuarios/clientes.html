@@ -4,9 +4,10 @@
 
 <div class="form-container">
     <br>
+    <h1 style="text-align: center;">Ingresar clientes</h1>
+    <br>
 <form action="/usuarios/clientes" method="post">
     <div class="container">
-        
         <input type="text" class="form-control" id="exampleFormControlInput1" name="nombre" placeholder="Nombre">
         <br>
         <input type="text" class="form-control" id="exampleFormControlInput1" name="direccion" placeholder="Direccion">
@@ -17,7 +18,35 @@
     </div>
 </form>
 </div>
-
+<script>
+    window.onload = function() {
+        // Validación de la longitud de la cédula
+        document.getElementById('miInput').onchange = function() {
+            if (this.value.length !== 10) {
+                alert('Necesita 10 dígitos la cedula');
+                this.value = '';
+            }
+        }
+    
+        // Validación de campos vacíos
+        document.querySelector('form').onsubmit = function(e) {
+            var inputs = this.querySelectorAll('input');
+            for (var i = 0; i < inputs.length; i++) {
+                if (inputs[i].value === '') {
+                    e.preventDefault();
+                    alert('Llene todos los campos');
+                    return;
+                }
+                else 
+                {
+                    alert('Guardado en la base de datos');
+                    return;
+                }
+                
+            }
+        }
+    }
+    </script>
 <script src="/static/js/cedula.js">
 </script>
 {% endblock %}

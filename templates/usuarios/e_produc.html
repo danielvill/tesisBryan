@@ -1,10 +1,21 @@
 {% extends "usuarios/layout.html" %}
 {% block content %}
-
+<div class="container">
+    <div class="input-group flex-nowrap">
+        <span class="input-group-text" id="addon-wrapping">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                class="bi bi-search" viewBox="0 0 16 16">
+                <path
+                    d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+            </svg>
+        </span>
+        <input type="search" id="filtro" class="form-control" placeholder="Busqueda" aria-label="Username"
+            aria-describedby="addon-wrapping">
+    </div>
 {% for vuse_producto in productos %}
 <form action="/useedit_prod/{{vuse_producto.codigo}}" method="POST">
     <br>
-    <div class="container">
+    
         <table class="table">
             <thead>
                 <tr>
@@ -23,29 +34,60 @@
                     <th>
                         Precio
                     </th>
+                    <th>
+                        Acciones
+                    </th>
                 </tr>
             </thead>
-            <tbody>
-                <th>
-                    <input type="text" class="form-control"  value="{{vuse_producto.codigo}}" name="codigo" placeholder="Codigo">
-                </th>
-                <th>
-                    <input type="text" class="form-control"  value="{{vuse_producto.marca}}" name="marca" placeholder="Marca">
-                </th>
-                <th>
-                    <input type="text" class="form-control"  value="{{vuse_producto.categoria}}" name="categoria" placeholder="Categoria">
-                </th>
-                <th>
-                    <input type="number" class="form-control" value="{{vuse_producto.cantidad}}" name="cantidad" placeholder="Cantidad">
-                </th>
-                <th>
-                    <input type="number" class="form-control"  value="{{vuse_producto.precio}}" name="precio"  placeholder="Precio">
-                </th>
+            <tbody data-marca="{{vuse_producto.marca}}">
+                <tr>
+                <td>
+                    <input type="text" class="form-control" value="{{vuse_producto.codigo}}" name="codigo"
+                        placeholder="Codigo">
+                </td>
+                <td>
+                    <input type="text" class="form-control" value="{{vuse_producto.marca}}" name="marca"
+                        placeholder="Marca">
+                </td>
+                <td>
+                    <input type="text" class="form-control" value="{{vuse_producto.categoria}}" name="categoria"
+                        placeholder="Categoria">
+                </td>
+                <td>
+                    <input type="number" class="form-control" value="{{vuse_producto.cantidad}}" name="cantidad"
+                        placeholder="Cantidad">
+                </td>
+                <td>
+                    <input type="number" class="form-control" value="{{vuse_producto.precio}}" name="precio"
+                        placeholder="Precio">
+                </td>
+                <td>
+                    <button type="submit" type="submit" class="editar btn btn-primary"> Editar</button>
+                </td>
+            </tr>
             </tbody>
-        </table> 
-        <button type="submit" type="submit" class="btn btn-primary"> Editar</button>
-    </div>
+        </table>
+    
 </form>
 {% endfor %}
+</div>
 
+<script>
+    $(document).ready(function () {
+        $("#filtro").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("tbody[data-marca]").filter(function () {
+                $(this).parent().toggle($(this).data("marca").toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+    //  Este es oara preguntar de la edicion 
+    $(document).ready(function () {
+        $(".editar").click(function (event) {
+            if (!confirm("¿Estás seguro de que quieres editar?")) {
+                event.preventDefault();
+            }
+        });
+    });
+</script>
 {% endblock %}

@@ -237,13 +237,38 @@ def reporte():
     reportes = db.ventas.find()
     fechas_formateadas, sumas_como_cadenas = formatear_fecha(reportes)
     return render_template('admin/reportes.html', ventas=reportes, fechas=fechas_formateadas, sumas=sumas_como_cadenas)
-#Vista Usuarios de todos los usuarios para Poder editarlos
+
+# * Vista Usuarios de todos los usuarios para Poder editarlos
 @app.route('/admin/v_user')
 def visuser():
     usuarios =db.usuarios.find()
     return render_template('admin/v_user.html', usuarios=usuarios)
 
-#Vista de Ventas por Mecanico para visualizarlo
+# * Eliminar los v_user
+@app.route('/delete_user/<string:user_name>')
+def eliuser(user_name):
+    user =db['usuarios']
+    user.delete_one({'usuario':user_name})
+    return redirect(url_for('visuser'))
+
+#* Editar los v_user
+@app.route('/edit_use/<string:user_name>', methods=['GET', 'POST'])
+def editus(user_name):
+    user = db['usuarios']
+    cedula = request.form['cedula']
+    usuario = request.form['usuario']
+    rol = request.form['rol']
+    email = request.form['correo']
+    contraseña = request.form['contraseña']
+    
+    if cedula and usuario and rol and email and contraseña:
+        user.update_one({'usuario':user_name},{'$set':{'cedula':cedula,'usuario':usuario,'rol':rol,'correo':email,'contraseña':contraseña}})
+        return redirect(url_for('visuser'))
+    else:
+        return render_template("admin/v_user.html")
+
+
+# * Vista de Ventas por Mecanico para visualizarlo
 @app.route('/admin/v_ventas')
 def v_ventas():
     # Obtener todas las ventas de la colección 'ventas'
@@ -275,11 +300,46 @@ def v_ventas():
     # Renderizar la plantilla 'admin/v_ventas.html' con los datos necesarios
     return render_template('admin/v_ventas.html', usuarios_ordenados=usuarios_ordenados)
 
-# ---------Carpeta Usuarios------------------------------
-#Carpetas Usuarios
+# * Editar ventas de mecanicos 
+
+# * Vista ventas de todos los usuarios para Poder editarlos
+@app.route('/admin/e_venta')
+def e_venta():
+    venta =db.ventas.find()
+    return render_template('admin/e_venta.html',ventas=venta )
+
+# * Eliminar ventas
+@app.route('/delete_venta/<string:venta_name>')
+def elive(venta_name):
+    venta =db['ventas']
+    venta.delete_one({'usuario':venta_name})
+    return redirect(url_for('e_venta'))
+
+#* Editar los v_user
+@app.route('/edit_venta/<string:venta_name>', methods=['GET', 'POST'])
+def editve(venta_name):
+    venta = db['ventas']
+    usuario = request.form['usuario']
+    cliente = request.form['cliente']
+    marca = request.form['marca']
+    categoria = request.form['categoria']
+    precio = request.form['precio']
+    cambio = request.form['cambio']
+    fecha = request.form['fecha']
+    
+    if usuario and cliente and marca and categoria and precio and cambio and fecha:
+        venta.update_one({'usuario':venta_name},{'$set':{'usuarios':usuario,'cliente':cliente,'marca':marca,'categoria':categoria,'precio':precio,'cambio':cambio,'fecha':fecha}})
+        return redirect(url_for('e_venta'))
+    else:
+        return render_template("admin/e_venta.html")
+
+
+# *---------Carpeta Usuarios------------------------------
+
+#*Carpetas Usuarios
 
 #Ingresado de Clientes los mecanicos
-@app.route('/usuarios/clientes')
+@app.route('/usuarios/clientes' ,methods=['GET','POST'])
 def useclient():
     if request.method == 'POST':
         clientes= db['clientes']
@@ -290,8 +350,9 @@ def useclient():
         if nombre and cedula and direccion:
             regcli= Clientes(nombre,cedula,direccion)
             clientes.insert_one(regcli.ClientDBCollection())
-            return redirect(url_for("usuarios/clientes.html"))
-    return render_template('usuarios/clientes.html')
+            return redirect(url_for("useclient"))
+    else:
+        return render_template('usuarios/clientes.html')
 
 #Editado de Clientes de los mecanicos
 
@@ -323,7 +384,7 @@ def vuse_cliente():
 @app.route('/usuarios/producto', methods=['GET', 'POST'])
 def usedproduc():
     if request.method == 'POST':     
-        producto= db.product["productos"]
+        producto= db["productos"]
         codigo=request.form["codigo"]
         marca=request.form["marca"]
         categoria=request.form["categoria"]
@@ -351,7 +412,28 @@ def useediproduc(prod_codigo):
     else:
         return render_template('usuarios/e_produc.html')
 
-    
+
+# * Ingreso de Usuarios ventas
+
+@app.route('/usuarios/ventas', methods=['GET', 'POST'])
+def useventa():
+    if request.method == 'POST':
+        ventas= db['ventas']
+        usuario= request.form["usuario"]
+        cliente=request.form["cliente"]
+        marca=request.form["marca"]
+        categoria=request.form["categoria"]
+        precio=request.form["precio"]
+        cambio=request.form["cambio"]
+        fecha=request.form["fecha"]
+        if usuario and cliente and marca and categoria and precio and cambio and fecha:
+            regven= Ventas(usuario,cliente,marca,categoria,precio,cambio,fecha)
+            ventas.insert_one(regven.VentaDBCollection())
+            return redirect(url_for('useventa'))
+    else:
+        return render_template('usuarios/ventas.html', usuarios=adsu(), clientes=adcli(), productos=adma(),categorias=adcat() )   
+
+
 #Carpeta vista de productos
 @app.route('/usuarios/e_produc')
 def vuse_producto():
@@ -360,4 +442,4 @@ def vuse_producto():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, port=3000)
+    app.run(debug=True, port=4000)

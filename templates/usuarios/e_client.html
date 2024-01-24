@@ -1,34 +1,84 @@
 {% extends "usuarios/layout.html" %}
 {% block content %}
 
-{% for vuse_cliente in clientes %}
-<form action="/edit_cliusu/{{vuse_cliente.nombre}}" method="POST">
-    <div class="container">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th scope="">Nombre</th>
-                    <th>Direccion</th>
-                    <th>Cedula o Ruc</th>
-                </tr>
-            </thead>
-            <tbody>
-                <th>
-                    <input type="text" class="form-control"  value="{{vuse_cliente.nombre}}" name="nombre" placeholder="Nombre">
-                </th>
-                <th>
-                    <input type="text" class="form-control"  value="{{vuse_cliente.direccion}}" name="direccion" placeholder="Direccion">
-                </th>
-                <th>
-                    <input type="number" class="form-control" id="miInput" value="{{vuse_cliente.cedula}}" name="cedula" oninput="limitarEntrada()" placeholder="Cedula o Ruc">
-                </th>
-            </tbody>
-        </table>
-        <button type="submit" type="submit" class="btn btn-primary"> Editar</button>
-    </div>
-    
-</form>
+<div class="container">
+  <div class="input-group flex-nowrap">
+    <span class="input-group-text" id="addon-wrapping">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search"
+        viewBox="0 0 16 16">
+        <path
+          d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+      </svg>
+    </span>
+    <input type="search" id="filtro" class="form-control" placeholder="Busqueda" aria-label="Username"
+      aria-describedby="addon-wrapping">
+  </div>
 
+
+  {% for vuse_cliente in clientes %}
+  <form action="/edit_cliusu/{{vuse_cliente.nombre}}" method="POST">
+
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="">Nombre</th>
+          <th>Direccion</th>
+          <th>Cedula o Ruc</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody data-nombre="{{ vuse_cliente.nombre}}">
+        <tr>
+          <td>
+            <input type="text" class="form-control" value="{{vuse_cliente.nombre}}" name="nombre" placeholder="Nombre">
+          </td>
+          <td>
+            <input type="text" class="form-control" value="{{vuse_cliente.direccion}}" name="direccion"
+              placeholder="Direccion">
+          </td>
+          <td>
+            <input type="number" class="form-control" id="miInput" value="{{vuse_cliente.cedula}}" name="cedula"
+              oninput="limitarEntrada()" placeholder="Cedula o Ruc">
+          </td>
+          <td>
+            <button type="submit" class="editar btn btn-primary"> Editar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    
+  </form>
+  {% endfor %}
+</div>
+<script>
+  $(document).ready(function () {
+    $("#filtro").on("keyup", function () {
+      var value = $(this).val().toLowerCase();
+      $("tbody[data-nombre]").filter(function () {
+        $(this).parent().toggle($(this).data("nombre").toLowerCase().indexOf(value) > -1)
+      });
+    });
+  });
+  // Validación de la longitud de la cédula
+  window.onload = function () {
+    document.getElementById('miInput').onchange = function () {
+      if (this.value.length !== 10) {
+        alert('Necesita 10 dígitos la cedula');
+        this.value = '';
+      }
+    }
+  }
+
+
+  //  Este es oara preguntar de la edicion 
+  $(document).ready(function () {
+    $(".editar").click(function (event) {
+      if (!confirm("¿Estás seguro de que quieres editar?")) {
+        event.preventDefault();
+      }
+    });
+  });
+</script>
 <script src="/static/js/cedula.js"></script>
-{% endfor %}
 {% endblock %}
