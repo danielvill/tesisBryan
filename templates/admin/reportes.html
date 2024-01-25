@@ -14,16 +14,14 @@
                 <th>Total</th>
             </tr>
         </thead>
-        {% for fecha in fechas %}
         <tbody>
+            {% for fecha in fechas %}
             <tr>
-                
                 <td>{{ fecha }}</td>
                 <td>{{ sumas[fecha] }}</td>
             </tr>
+            {% endfor %}
         </tbody>
-    
-    {% endfor %}
 </table>
 </div>
 <script>
