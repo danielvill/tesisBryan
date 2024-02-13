@@ -11,39 +11,39 @@
         </span>
         <input type="search" id="filtro" class="form-control" placeholder="Busqueda" aria-label="Username"
             aria-describedby="addon-wrapping">
-</div>
-    {% for e_venta in ventas %}
-    <form action="/edit_venta/{{e_venta.usuario}}" method="POST">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>
-                        Usuario
-                    </th>
-                    <th>
-                        Cliente
-                    </th>
-                    <th>
-                        Marca
-                    </th>
-                    <th>
-                        Categoria
-                    </th>
-                    <th>
-                        Precio
-                    </th>
-                    <th>
-                        Cambio
-                    </th>
-                    <th>
-                        Fecha
-                    </th>
-                    <th>
-                        Acciones
-                    </th>
-                </tr>
-            </thead>
-            <tbody data-usuario="{{e_venta.usuario}}">
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Usuario
+                </th>
+                <th>
+                    Cliente
+                </th>
+                <th>
+                    Marca
+                </th>
+                <th>
+                    Categoria
+                </th>
+                <th>
+                    Precio de la Pieza
+                </th>
+                <th>
+                    Precion de Mano de obra
+                </th>
+                <th>
+                    Fecha
+                </th>
+                <th>
+                    Acciones
+                </th>
+            </tr>
+        </thead>
+        {% for e_venta in ventas %}
+        <tbody data-usuario="{{e_venta.usuario}}">
+            <form action="/edit_venta/{{e_venta.usuario}}" method="POST">
                 <th>
                     <input type="text" class="form-control" value="{{e_venta.usuario}}" name="usuario">
                 </th>
@@ -69,11 +69,10 @@
                     <a href="{{url_for('elive',venta_name=e_venta.usuario)}}"
                         class="eliminar btn btn-danger ">Eliminar</a>
                 </th>
-            </tbody>
-
-        </table>
+            </form>
+        </tbody>
         {% endfor %}
-    </form>
+    </table>
 </div>
 <script>
     $(document).ready(function () {
@@ -85,19 +84,19 @@
         });
     });
 
-//  Este es oara preguntar de la edicion y eliminacion
-$(document).ready(function(){
-  $(".editar").click(function(event){
-    if(!confirm("¿Estás seguro de que quieres editar?")){
-      event.preventDefault();
-    }
-  });
+    //  Este es oara preguntar de la edicion y eliminacion
+    $(document).ready(function () {
+        $(".editar").click(function (event) {
+            if (!confirm("¿Estás seguro de que quieres editar?")) {
+                event.preventDefault();
+            }
+        });
 
-  $(".eliminar").click(function(event){
-    if(!confirm("¿Estás seguro de que quieres eliminar?")){
-      event.preventDefault();
-    }
-  });
-});
+        $(".eliminar").click(function (event) {
+            if (!confirm("¿Estás seguro de que quieres eliminar?")) {
+                event.preventDefault();
+            }
+        });
+    });
 </script>
 {% endblock %}

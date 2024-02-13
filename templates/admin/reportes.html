@@ -1,13 +1,10 @@
 {% extends "admin/layout.html" %}
 {% block content %}
 <br>
-
 <div class="container">
     <h1 style="text-align: center;">Reporte Anual</h1>
     <br>
     <table id="example" class="display" style="width:100%">
-    
-    
         <thead>
             <tr>
                 <th>Fecha</th>
@@ -22,9 +19,42 @@
             </tr>
             {% endfor %}
         </tbody>
-</table>
+    </table>
+    <br>
+    <canvas id="myChart"></canvas>
 </div>
 <script>
-new DataTable('#example');
+var ctx = document.getElementById('myChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: {{ fechas|tojson }},
+            datasets: [{
+                label: 'Ventas',
+                data: {{ sumas|tojson }},
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 2
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    //Cambio de english a spanish
+    $(document).ready(function () {
+        $('#example').DataTable({
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
+            }
+        });
+    });
+
 </script>
+
 {% endblock %}

@@ -26,7 +26,7 @@ def index():
         usuario = request.form['usuario']
         contra = request.form['contraseña']
         usuario_found = db.admin.find_one({'usuario':usuario,'contraseña':contra})
-        usuario_found2= db.usuarios.find_one({'usuario':usuario,'contraseña':contra})#Este modulo es para el usuario para ingresar a la otra pagina 
+        usuario_found2= db.usuarios.find_one({'usuario':usuario,'contraseña':contra})#Este modulo es para el usuario  
         if usuario_found:
             return redirect(url_for('client'))
         elif usuario_found2:
@@ -333,8 +333,44 @@ def editve(venta_name):
     else:
         return render_template("admin/e_venta.html")
 
+# Vista de reportes diarios de todos lo mecanicos
+@app.route('/admin/rep_diario')
+def repodia(): 
 
-# *---------Carpeta Usuarios------------------------------
+        # Obtener todas las ventas de la colección 'ventas'
+        ventas = db.ventas.find()
+        
+        # Crear un diccionario para almacenar las ventas por usuario
+        ventas_por_usuario = {}
+        
+        # Iterar sobre las ventas y sumar las cantidades por usuario
+        for venta in ventas:
+            usuario = venta['usuario']
+            cantidad = float(venta['cambio'])
+            fecha = venta ["fecha"]  
+        
+            # Convertir la fecha a formato español
+            fecha = datetime.strptime(fecha, "%Y-%m-%d")
+            fecha_es = format_date(fecha, 'EEEE d MMMM yyyy', locale='es_ES')
+        
+            # Verificar si el usuario ya está en el diccionario
+            if usuario in ventas_por_usuario:
+                # Verificar si la fecha ya está en el diccionario del usuario
+                if fecha_es in ventas_por_usuario[usuario]:
+                    ventas_por_usuario[usuario][fecha_es] += cantidad
+                else:
+                    ventas_por_usuario[usuario][fecha_es] = cantidad
+            else:
+                ventas_por_usuario[usuario] = {fecha_es: cantidad}
+        
+        # Ordenar los usuarios por la cantidad de ventas en orden descendente
+        usuarios_ordenados = sorted(ventas_por_usuario.items(), key=lambda x: sum(x[1].values()), reverse=True)
+
+        # Renderizar la plantilla 'admin/v_ventas.html' con los datos necesarios
+        return render_template('admin/rep_diario.html', usuarios_ordenados=usuarios_ordenados)
+
+
+
 
 #*Carpetas Usuarios
 
@@ -381,37 +417,37 @@ def vuse_cliente():
 
 #Carpetas Usuarios Ingresado de Productos 
 
-@app.route('/usuarios/producto', methods=['GET', 'POST'])
-def usedproduc():
-    if request.method == 'POST':     
-        producto= db["productos"]
-        codigo=request.form["codigo"]
-        marca=request.form["marca"]
-        categoria=request.form["categoria"]
-        cantidad=request.form["cantidad"]
-        precio=request.form["precio"]
-        if codigo and marca and categoria and cantidad and precio:
-            regpro= Productos(codigo,marca,categoria,cantidad,precio)
-            producto.insert_one(regpro.ProduDBCollection())
-            return redirect(url_for('usedproduc'))                        
-    return render_template('usuarios/producto.html')
+#@app.route('/usuarios/producto', methods=['GET', 'POST'])
+#def usedproduc():
+#    if request.method == 'POST':     
+#        producto= db["productos"]
+#        codigo=request.form["codigo"]
+#        marca=request.form["marca"]
+#        categoria=request.form["categoria"]
+#        cantidad=request.form["cantidad"]
+#        precio=request.form["precio"]
+#        if codigo and marca and categoria and cantidad and precio:
+#            regpro= Productos(codigo,marca,categoria,cantidad,precio)
+#            producto.insert_one(regpro.ProduDBCollection())
+#            return redirect(url_for('usedproduc'))                        
+#    return render_template('usuarios/producto.html')
 
 # Carpeta de vistado de productos y editado de productos
-@app.route('/useedit_prod/<string:prod_codigo>', methods=['GET', 'POST'])
-def useediproduc(prod_codigo):
-    producto =db['productos']
-    if request.method == 'POST':
-        codigo= request.form["codigo"]
-        marca=request.form["marca"]
-        categoria=request.form["categoria"]
-        cantidad=request.form["cantidad"]
-        precio=request.form["precio"]
-        if codigo and marca and categoria and cantidad and precio:
-            producto.update_one({'codigo':prod_codigo},{'$set':{'codigo':codigo,'marca':marca,'categoria':categoria,'cantidad':cantidad,'precio':precio}})
-            return redirect(url_for('vuse_producto'))
-    else:
-        return render_template('usuarios/e_produc.html')
-
+#@app.route('/useedit_prod/<string:prod_codigo>', methods=['GET', 'POST'])
+#def useediproduc(prod_codigo):
+#    producto =db['productos']
+#    if request.method == 'POST':
+#        codigo= request.form["codigo"]
+#        marca=request.form["marca"]
+#        categoria=request.form["categoria"]
+#        cantidad=request.form["cantidad"]
+#        precio=request.form["precio"]
+#        if codigo and marca and categoria and cantidad and precio:
+#            producto.update_one({'codigo':prod_codigo},{'$set':{'codigo':codigo,'marca':marca,'categoria':categoria,'cantidad':cantidad,'precio':precio}})
+#            return redirect(url_for('vuse_producto'))
+#    else:
+#        return render_template('usuarios/e_produc.html')
+#
 
 # * Ingreso de Usuarios ventas
 

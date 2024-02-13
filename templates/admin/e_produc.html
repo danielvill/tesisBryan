@@ -1,9 +1,6 @@
 {% extends "admin/layout.html" %}
 {% block content %}
-
-
 <div class="container">
-
     <div class="input-group flex-nowrap">
         <span class="input-group-text" id="addon-wrapping">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -15,7 +12,6 @@
         <input type="search" id="filtro" class="form-control" placeholder="Busqueda" aria-label="Username"
             aria-describedby="addon-wrapping">
     </div>
-
     {% for producto in productos %}
     <form action="/edit_prod/{{producto.codigo}}" method="POST">
         <table >
@@ -60,7 +56,6 @@
                 <th><button type="submit" type="submit" class="editar btn btn-primary"> Editar</button>
                     <a href="{{url_for('eliproduc', prod_codigo=producto.codigo)}}"class="eliminar btn btn-danger ">Eliminar</a></th>
             </tbody>
-
         </table> 
         {% endfor %}
 </form>
@@ -74,7 +69,6 @@
             });
         });
     });
-
 // Este es oara preguntar de la edicion y eliminacion
    $(document).ready(function(){
   $(".editar").click(function(event){
@@ -82,15 +76,11 @@
       event.preventDefault();
     }
   });
-
   $(".eliminar").click(function(event){
     if(!confirm("¿Estás seguro de que quieres eliminar?")){
       event.preventDefault();
     }
   });
 });
-
-
 </script>
-
 {% endblock %}
