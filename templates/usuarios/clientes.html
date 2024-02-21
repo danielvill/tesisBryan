@@ -12,41 +12,12 @@
         <br>
         <input type="text" class="form-control" id="exampleFormControlInput1" name="direccion" placeholder="Direccion">
         <br>
-        <input type="number" class="form-control" id="miInput" oninput="limitarEntrada()" name="cedula" placeholder="Cedula o Ruc">
+        <input type="number" class="form-control" id="miInput" oninput="limitarEntrada()" name="cedula" placeholder="Cedula ">
         <br>
         <button type="submit" class="btn btn-primary"> Enviar</button>
     </div>
 </form>
 </div>
-<script>
-    window.onload = function() {
-        // Validación de la longitud de la cédula
-        document.getElementById('miInput').onchange = function() {
-            if (this.value.length !== 10) {
-                alert('Necesita 10 dígitos la cedula');
-                this.value = '';
-            }
-        }
-    
-        // Validación de campos vacíos
-        document.querySelector('form').onsubmit = function(e) {
-            var inputs = this.querySelectorAll('input');
-            for (var i = 0; i < inputs.length; i++) {
-                if (inputs[i].value === '') {
-                    e.preventDefault();
-                    alert('Llene todos los campos');
-                    return;
-                }
-                else 
-                {
-                    alert('Guardado en la base de datos');
-                    return;
-                }
-                
-            }
-        }
-    }
-    </script>
-<script src="/static/js/cedula.js">
-</script>
+
+<script src="/static/js/validaruser/user_ingresar.js"></script>
 {% endblock %}

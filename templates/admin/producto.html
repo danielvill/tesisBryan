@@ -7,39 +7,31 @@
         <div class="container">
             <input type="number" name="codigo" class="form-control"  placeholder="Codigo">
             <br>
-            <input type="text" name="marca" class="form-control"  placeholder="Marca">
+            <select name="marca" id="" class="form-control">
+                <option value="Hifly">Hifly</option>
+                <option value="Onix">Onix</option>
+                <option value="Sunful">Sunful</option>
+                <option value="Terraking">Terraking</option>
+                <option value="Sin nombre">Sin nombre</option>
+            </select>
             <br>
-            <input type="text" name="categoria" class="form-control" 
-                placeholder="Categoria">
+            <select name="categoria" id="" class="form-control">
+                <option value="Llantas">Llantas</option>
+                <option value="Pernos">Pernos</option>
+                <option value="Cauchos">Cauchos</option>
+                <option value="Tubos">Tubos</option>
+                <option value="Aros">Aros</option>
+            </select>
             <br>
             <input type="number" name="cantidad" class="form-control" 
                 placeholder="Cantidad">
             <br>
-            <input type="number" name="precio" class="form-control"  placeholder="Precio">
+            <input type="number" step="0.01"  name="precio" class="form-control"  placeholder="Precio">
             <br>
             <button type="submit" class="btn btn-primary">Enviar</button>
         </div>
     </form>
 </div>
-<script>
-    window.onload = function () {
-        // Validación de campos vacíos
-        document.querySelector('form').onsubmit = function(e) {
-            var inputs = this.querySelectorAll('input');
-            for (var i = 0; i < inputs.length; i++) {
-                if (inputs[i].value === '') {
-                    e.preventDefault();
-                    alert('Llene todos los campos');
-                    return;
-                }
-                else 
-                {
-                    alert('Guardado en la base de datos');
-                    return;
-                }
-                
-            }
-        }
-    }
+<script src="/static/js/producto.js">
 </script>
 {% endblock %}

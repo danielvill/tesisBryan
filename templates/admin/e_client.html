@@ -34,8 +34,7 @@
                             placeholder="Direccion">
                     </td>
                     <td>
-                        <input type="number" class="form-control" id="miInput" value="{{client.cedula}}"
-                            name="cedula" oninput="limitarEntrada()" placeholder="Cedula o Ruc">
+                        <input type="number" class="form-control"  value="{{client.cedula}}" name="cedula"  placeholder="Cedula o Ruc">
                     </td>
                     <td>
                         <button class="editar btn btn-primary" type="submit">Editar</button>
@@ -47,31 +46,6 @@
     </form>
     {% endfor %}
 </div>
-<script>
-    $(document).ready(function () {
-        $("#filtro").on("keyup", function () {
-            var value = $(this).val().toLowerCase();
-            $("tbody[data-nombre]").filter(function () {
-                $(this).parent().toggle($(this).data("nombre").toLowerCase().indexOf(value) > -1)
-            });
-        });
-    });
-//  Este es oara preguntar de la edicion y eliminacion
-$(document).ready(function(){
-  $(".editar").click(function(event){
-    if(!confirm("¿Estás seguro de que quieres editar?")){
-      event.preventDefault();
-    }
-  });
 
-  $(".eliminar").click(function(event){
-    if(!confirm("¿Estás seguro de que quieres eliminar?")){
-      event.preventDefault();
-    }
-  });
-});
-</script>
-
-<script src="/static/js/cedula.js"></script>
-
+<script src="/static/js/validaradmin/editclientes.js"></script>
 {% endblock %}

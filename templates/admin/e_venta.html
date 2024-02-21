@@ -12,6 +12,8 @@
         <input type="search" id="filtro" class="form-control" placeholder="Busqueda" aria-label="Username"
             aria-describedby="addon-wrapping">
     </div>
+    {% for e_venta in ventas %}
+    <form action="/edit_venta/{{e_venta.usuario}}" method="POST">
     <table class="table">
         <thead>
             <tr>
@@ -28,10 +30,10 @@
                     Categoria
                 </th>
                 <th>
-                    Precio de la Pieza
+                    Precio por unidad de la pieza
                 </th>
                 <th>
-                    Precion de Mano de obra
+                    Precio de Mano de obra
                 </th>
                 <th>
                     Fecha
@@ -41,38 +43,51 @@
                 </th>
             </tr>
         </thead>
-        {% for e_venta in ventas %}
         <tbody data-usuario="{{e_venta.usuario}}">
-            <form action="/edit_venta/{{e_venta.usuario}}" method="POST">
-                <th>
-                    <input type="text" class="form-control" value="{{e_venta.usuario}}" name="usuario">
-                </th>
-                <th>
-                    <input type="text" class="form-control" value="{{e_venta.cliente}}" name="cliente">
-                </th>
-                <th>
-                    <input type="text" class="form-control" value="{{e_venta.marca}}" name="marca">
-                </th>
-                <th>
-                    <input type="text" class="form-control" value="{{e_venta.categoria}}" name="categoria">
-                </th>
-                <th>
-                    <input type="text" class="form-control" value="{{e_venta.precio}}" name="precio">
-                </th>
-                <th>
-                    <input type="text" class="form-control" value="{{e_venta.cambio}}" name="cambio">
-                </th>
-                <th>
-                    <input type="text" class="form-control" value="{{e_venta.fecha}}" name="fecha">
-                </th>
-                <th><button type="submit" type="submit" class="editar btn btn-primary"> Editar</button>
-                    <a href="{{url_for('elive',venta_name=e_venta.usuario)}}"
-                        class="eliminar btn btn-danger ">Eliminar</a>
-                </th>
-            </form>
+
+            <th>
+                <input type="text" class="form-control" value="{{e_venta.usuario}}" name="usuario">
+            </th>
+            <th>
+                <input type="text" class="form-control" value="{{e_venta.cliente}}" name="cliente">
+            </th>
+            <th>
+                <select name="marca" id="" class="form-control">
+                    <option value="{{e_venta.marca}}">{{e_venta.marca}}</option>
+                    <option value="Hifly">Hifly</option>
+                    <option value="Onix">Onix</option>
+                    <option value="Sunful">Sunful</option>
+                    <option value="Terraking">Terraking</option>
+                    <option value="Sin nombre">Sin nombre</option>
+                </select>
+            </th>
+            <th>
+                <select name="categoria" id="" class="form-control">
+                    <option value="{{e_venta.categoria}}">{{e_venta.categoria}}</option>
+                    <option value="Llantas">Llantas</option>
+                    <option value="Pernos">Pernos</option>
+                    <option value="Cauchos">Cauchos</option>
+                    <option value="Tubos">Tubos</option>
+                    <option value="Aros">Aros</option>
+                </select>
+            </th>
+            <th>
+                <input type="number" step="0.01" class="form-control" value="{{e_venta.precio}}" name="precio">
+            </th>
+            <th>
+                <input type="number" step="0.01" class="form-control" value="{{e_venta.cambio}}" name="cambio">
+            </th>
+            <th>
+                <input type="date" class="form-control" value="{{e_venta.fecha}}" name="fecha">
+            </th>
+            <th>
+                <button  type="submit" class="editar btn btn-primary"> Editar</button>
+                <a href="{{url_for('elive',venta_name=e_venta.usuario)}}" class="eliminar btn btn-danger ">Eliminar</a>
+            </th>
         </tbody>
-        {% endfor %}
     </table>
+    </form>
+    {% endfor %}
 </div>
 <script>
     $(document).ready(function () {

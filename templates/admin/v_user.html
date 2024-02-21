@@ -5,23 +5,23 @@
 <div class="container">
    <div class="input-group flex-nowrap">
       <span class="input-group-text" id="addon-wrapping">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-              class="bi bi-search" viewBox="0 0 16 16">
-              <path
-                  d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
-          </svg>
+         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search"
+            viewBox="0 0 16 16">
+            <path
+               d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+         </svg>
       </span>
       <input type="search" id="filtro" class="form-control" placeholder="Busqueda" aria-label="Username"
-          aria-describedby="addon-wrapping">
-  </div>
-{% for visuser in usuarios %}
-<form action="/edit_use/{{visuser.usuario}}" method="post">
- 
-      <table >
+         aria-describedby="addon-wrapping">
+   </div>
+   {% for visuser in usuarios %}
+   <form action="/edit_use/{{visuser.usuario}}" method="post">
+
+      <table>
          <thead>
             <tr>
                <th>Cedula</th>
-               <th >Nombre</th>
+               <th>Nombre</th>
                <th>Rol</th>
                <th>Correo</th>
                <th>Contraseña</th>
@@ -30,50 +30,30 @@
          </thead>
          <tbody data-nombre="{{visuser.usuario}}">
             <th>
-               <input type="number" class="form-control" id="miInput" value="{{visuser.cedula}}" name="cedula" oninput="limitarEntrada()" placeholder="Cedula o Ruc">
+               <input type="number" class="form-control" id="miInput" value="{{visuser.cedula}}" name="cedula"
+                  oninput="limitarEntrada()" placeholder="Cedula o Ruc">
             </th>
             <th>
-               <input type="text" class="form-control"  value="{{visuser.usuario}}" name="usuario" placeholder="Nombre">
+               <input type="text" class="form-control" value="{{visuser.usuario}}" name="usuario" placeholder="Nombre">
             </th>
             <th>
-               <input type="text" class="form-control"  value="{{visuser.rol}}" name="rol" placeholder="Rol">
+               <input type="text" class="form-control" value="{{visuser.rol}}" name="rol" placeholder="Rol" readonly>
             </th>
             <th>
-               <input type="text" class="form-control"  value="{{visuser.correo}}" name="correo" placeholder="Correo">
+               <input type="text" class="form-control" value="{{visuser.correo}}"  name="correo" placeholder="Correo">
             </th>
             <th>
-               <input type="password" class="form-control" id="exampleFormControlInput1" value="{{visuser.contraseña}}" name="contraseña" placeholder="Password">
+               <input type="text" class="form-control" id="exampleFormControlInput1" value="{{visuser.contraseña}}"
+                  name="contraseña" placeholder="Password">
             </th>
             <th><button type="submit" class=" editar btn btn-primary"> Editar</button>
-               <a href="{{url_for('eliuser',user_name=visuser.usuario)}}"class="eliminar btn btn-danger ">Eliminar</a></th>
+               <a href="{{url_for('eliuser',user_name=visuser.usuario)}}" class="eliminar btn btn-danger ">Eliminar</a>
+            </th>
          </tbody>
       </table>
-      {% endfor %}
-   </div>
-</form>
-<script src="/static/js/cedula.js"></script>
-<script>
-   $(document).ready(function () {
-       $("#filtro").on("keyup", function () {
-           var value = $(this).val().toLowerCase();
-           $("tbody[data-nombre]").filter(function () {
-               $(this).parent().toggle($(this).data("nombre").toLowerCase().indexOf(value) > -1)
-           });
-       });
-   });
-// Este es oara preguntar de la edicion y eliminacion
-   $(document).ready(function(){
-  $(".editar").click(function(event){
-    if(!confirm("¿Estás seguro de que quieres editar?")){
-      event.preventDefault();
-    }
-  });
+   </form>
+   {% endfor %}
+</div>
 
-  $(".eliminar").click(function(event){
-    if(!confirm("¿Estás seguro de que quieres eliminar?")){
-      event.preventDefault();
-    }
-  });
-});
-</script>
+<script src="/static/js/validaradmin/editmecanico.js"></script>
 {% endblock %}

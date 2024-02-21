@@ -9,47 +9,23 @@
 
             <input type="number" id="miInput" oninput="limitarEntrada()" class="form-control" name="cedula" placeholder="Cedula">
             <br>
-            <input type="text" class="form-control" id="email" name="usuario" placeholder="Usuario">
+            <input type="text" class="form-control" id="" name="usuario" placeholder="Usuario">
             <br>
-            <input type="text" class="form-control" name="rol" placeholder="Roles">
+            <select name="rol" id="" class="form-control">
+                <option value="Mecanico">Mecanico</option>
+            </select>
+           
             <br>
 
-            <input type="email" class="form-control" id="email" name="correo" placeholder="Correo">
+            <input type="email" class="form-control" id="correo" name="correo" placeholder="Correo">
             <br>
 
-            <input type="password" class="form-control" id="password" name="contraseña" placeholder="Contraseña">
+            <input type="password" class="form-control" id="" name="contraseña" placeholder="Contraseña">
             <br>
 
             <button type="submit" class="btn btn-primary">Guardar Mecanico</button>
         </form>
     </div>
 </div>
-<script>
-    window.onload = function() {
-    document.getElementById('miInput').onchange = function() {
-        if (this.value.length !== 10) {
-            alert('Necesita 10 dígitos');
-            this.value = '';
-        }
-    }
-}
-
-document.querySelector('form').onsubmit = function(e) {
-            var inputs = this.querySelectorAll('input');
-            for (var i = 0; i < inputs.length; i++) {
-                if (inputs[i].value === '') {
-                    e.preventDefault();
-                    alert('Llene todos los campos');
-                    return;
-                }
-                else 
-                {
-                    alert('Guardado en la base de datos');
-                    return;
-                }
-                
-            }
-        }
-</script>
-<script src="/static/js/cedula.js"></script>
+<script src="/static/js/mecanico.js"></script>
 {% endblock %}

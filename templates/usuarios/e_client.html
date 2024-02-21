@@ -17,8 +17,6 @@
 
   {% for vuse_cliente in clientes %}
   <form action="/edit_cliusu/{{vuse_cliente.nombre}}" method="POST">
-
-
     <table class="table">
       <thead>
         <tr>
@@ -47,38 +45,9 @@
         </tr>
       </tbody>
     </table>
-    
   </form>
   {% endfor %}
 </div>
-<script>
-  $(document).ready(function () {
-    $("#filtro").on("keyup", function () {
-      var value = $(this).val().toLowerCase();
-      $("tbody[data-nombre]").filter(function () {
-        $(this).parent().toggle($(this).data("nombre").toLowerCase().indexOf(value) > -1)
-      });
-    });
-  });
-  // Validación de la longitud de la cédula
-  window.onload = function () {
-    document.getElementById('miInput').onchange = function () {
-      if (this.value.length !== 10) {
-        alert('Necesita 10 dígitos la cedula');
-        this.value = '';
-      }
-    }
-  }
-
-
-  //  Este es oara preguntar de la edicion 
-  $(document).ready(function () {
-    $(".editar").click(function (event) {
-      if (!confirm("¿Estás seguro de que quieres editar?")) {
-        event.preventDefault();
-      }
-    });
-  });
+<script src="/static/js/validaruser/user_editar.js">
 </script>
-<script src="/static/js/cedula.js"></script>
 {% endblock %}

@@ -3,8 +3,8 @@
 <div class="container">
     <div class="input-group flex-nowrap">
         <span class="input-group-text" id="addon-wrapping">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                class="bi bi-search" viewBox="0 0 16 16">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search"
+                viewBox="0 0 16 16">
                 <path
                     d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
             </svg>
@@ -12,9 +12,10 @@
         <input type="search" id="filtro" class="form-control" placeholder="Busqueda" aria-label="Username"
             aria-describedby="addon-wrapping">
     </div>
+    <br>
     {% for producto in productos %}
     <form action="/edit_prod/{{producto.codigo}}" method="POST">
-        <table >
+        <table>
             <thead>
                 <tr>
                     <th>
@@ -39,26 +40,46 @@
             </thead>
             <tbody data-marca="{{producto.marca}}">
                 <th>
-                    <input type="text" class="form-control"  value="{{producto.codigo}}" name="codigo" placeholder="Codigo">
+                    <input type="text" class="form-control" value="{{producto.codigo}}" name="codigo"
+                        placeholder="Codigo">
                 </th>
                 <th>
-                    <input type="text" class="form-control"  value="{{producto.marca}}" name="marca" placeholder="Marca">
+                    <select name="marca" id="" class="form-control">
+                        <option value="{{producto.marca}}">{{producto.marca}}</option>
+                        <option value="Hifly">Hifly</option>
+                        <option value="Onix">Onix</option>
+                        <option value="Sunful">Sunful</option>
+                        <option value="Terraking">Terraking</option>
+                        <option value="Sin nombre">Sin nombre</option>
+                    </select>
+
                 </th>
                 <th>
-                    <input type="text" class="form-control"  value="{{producto.categoria}}" name="categoria" placeholder="Categoria">
+                    <select name="categoria" id="" class="form-control">
+                        <option value="{{producto.categoria}}">{{producto.categoria}}</option>
+                        <option value="Llantas">Llantas</option>
+                        <option value="Pernos">Pernos</option>
+                        <option value="Cauchos">Cauchos</option>
+                        <option value="Tubos">Tubos</option>
+                        <option value="Aros">Aros</option>
+                    </select>
                 </th>
                 <th>
-                    <input type="number" class="form-control"  value="{{producto.cantidad}}" name="cantidad"  placeholder="Cantidad">
+                    <input type="number" class="form-control" value="{{producto.cantidad}}" name="cantidad"
+                        placeholder="Cantidad">
                 </th>
                 <th>
-                    <input type="number" class="form-control"  value="{{producto.precio}}" name="precio"  placeholder="Precio">
+                    <input type="number" step="0.01" class="form-control" value="{{producto.precio}}" name="precio"
+                        placeholder="Precio">
                 </th>
                 <th><button type="submit" type="submit" class="editar btn btn-primary"> Editar</button>
-                    <a href="{{url_for('eliproduc', prod_codigo=producto.codigo)}}"class="eliminar btn btn-danger ">Eliminar</a></th>
+                    <a href="{{url_for('eliproduc', prod_codigo=producto.codigo)}}"
+                        class="eliminar btn btn-danger ">Eliminar</a>
+                </th>
             </tbody>
-        </table> 
-        {% endfor %}
-</form>
+        </table>
+    </form>
+    {% endfor %}
 </div>
 <script>
     $(document).ready(function () {
@@ -69,18 +90,18 @@
             });
         });
     });
-// Este es oara preguntar de la edicion y eliminacion
-   $(document).ready(function(){
-  $(".editar").click(function(event){
-    if(!confirm("¿Estás seguro de que quieres editar?")){
-      event.preventDefault();
-    }
-  });
-  $(".eliminar").click(function(event){
-    if(!confirm("¿Estás seguro de que quieres eliminar?")){
-      event.preventDefault();
-    }
-  });
-});
+    // Este es oara preguntar de la edicion y eliminacion
+    $(document).ready(function () {
+        $(".editar").click(function (event) {
+            if (!confirm("¿Estás seguro de que quieres editar?")) {
+                event.preventDefault();
+            }
+        });
+        $(".eliminar").click(function (event) {
+            if (!confirm("¿Estás seguro de que quieres eliminar?")) {
+                event.preventDefault();
+            }
+        });
+    });
 </script>
 {% endblock %}

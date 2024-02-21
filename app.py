@@ -1,4 +1,4 @@
-from flask import flash, Flask, render_template, request,Response ,jsonify, redirect, url_for
+from flask import flash, Flask,session, render_template, request,Response ,jsonify, redirect, url_for
 from controllers.bdatos import Conexion as dbase
 from modules.clientes import Clientes
 from modules.admin import Admin
@@ -28,8 +28,10 @@ def index():
         usuario_found = db.admin.find_one({'usuario':usuario,'contraseña':contra})
         usuario_found2= db.usuarios.find_one({'usuario':usuario,'contraseña':contra})#Este modulo es para el usuario  
         if usuario_found:
+            session['usuario'] = usuario
             return redirect(url_for('client'))
         elif usuario_found2:
+            session['usuario'] = usuario
             return redirect(url_for('useclient'))
         else:
             flash('Usuario o contraseña incorrectas')
@@ -453,22 +455,24 @@ def vuse_cliente():
 
 @app.route('/usuarios/ventas', methods=['GET', 'POST'])
 def useventa():
-    if request.method == 'POST':
-        ventas= db['ventas']
-        usuario= request.form["usuario"]
-        cliente=request.form["cliente"]
-        marca=request.form["marca"]
-        categoria=request.form["categoria"]
-        precio=request.form["precio"]
-        cambio=request.form["cambio"]
-        fecha=request.form["fecha"]
-        if usuario and cliente and marca and categoria and precio and cambio and fecha:
-            regven= Ventas(usuario,cliente,marca,categoria,precio,cambio,fecha)
-            ventas.insert_one(regven.VentaDBCollection())
-            return redirect(url_for('useventa'))
+    if "usuarios" in session:    
+        if request.method == 'POST':
+            ventas= db['ventas']
+            usuario= request.form["usuario"]
+            cliente=request.form["cliente"]
+            marca=request.form["marca"]
+            categoria=request.form["categoria"]
+            precio=request.form["precio"]
+            cambio=request.form["cambio"]
+            fecha=request.form["fecha"]
+            if usuario and cliente and marca and categoria and precio and cambio and fecha:
+                regven= Ventas(usuario,cliente,marca,categoria,precio,cambio,fecha)
+                ventas.insert_one(regven.VentaDBCollection())
+                return redirect(url_for('useventa'))
+            
     else:
-        return render_template('usuarios/ventas.html', usuarios=adsu(), clientes=adcli(), productos=adma(),categorias=adcat() )   
-
+        return render_template('usuarios/ventas.html', usuarios=adsu(), clientes=adcli(), productos=adma(),categorias=adcat() , usuario=session['usuario'])   
+    
 
 #Carpeta vista de productos
 @app.route('/usuarios/e_produc')
