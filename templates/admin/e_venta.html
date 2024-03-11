@@ -1,110 +1,168 @@
 {% extends "admin/layout.html" %}
 {% block content %}
 <div class="container">
-    <div class="input-group flex-nowrap">
-        <span class="input-group-text" id="addon-wrapping">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search"
-                viewBox="0 0 16 16">
-                <path
-                    d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
-            </svg>
-        </span>
-        <input type="search" id="filtro" class="form-control" placeholder="Busqueda" aria-label="Username"
-            aria-describedby="addon-wrapping">
-    </div>
-    {% for e_venta in ventas %}
-    <form action="/edit_venta/{{e_venta.usuario}}" method="POST">
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    Usuario
-                </th>
-                <th>
-                    Cliente
-                </th>
-                <th>
-                    Marca
-                </th>
-                <th>
-                    Categoria
-                </th>
-                <th>
-                    Precio por unidad de la pieza
-                </th>
-                <th>
-                    Precio de Mano de obra
-                </th>
-                <th>
-                    Fecha
-                </th>
-                <th>
-                    Acciones
-                </th>
-            </tr>
-        </thead>
-        <tbody data-usuario="{{e_venta.usuario}}">
-            <th>
-                <input type="text" class="form-control" value="{{e_venta.usuario}}" name="usuario">
-            </th>
-            <th>
-                <input type="text" class="form-control" value="{{e_venta.cliente}}" name="cliente">
-            </th>
-            <th>
-                <select name="marca" id="" class="form-control">
-                    <option value="{{e_venta.marca}}">{{e_venta.marca}}</option>
-                    <option value="Hifly">Hifly</option>
-                    <option value="Onix">Onix</option>
-                    <option value="Sunful">Sunful</option>
-                    <option value="Terraking">Terraking</option>
-                    <option value="Sin nombre">Sin nombre</option>
-                </select>
-            </th>
-            <th>
-                <select name="categoria" id="" class="form-control">
-                    <option value="{{e_venta.categoria}}">{{e_venta.categoria}}</option>
-                    <option value="Llantas">Llantas</option>
-                    <option value="Pernos">Pernos</option>
-                    <option value="Cauchos">Cauchos</option>
-                    <option value="Tubos">Tubos</option>
-                    <option value="Aros">Aros</option>
-                </select>
-            </th>
-            <th>
-                <input type="number" step="0.01" class="form-control" value="{{e_venta.precio}}" name="precio">
-            </th>
-            <th>
-                <input type="number" step="0.01" class="form-control" value="{{e_venta.cambio}}" name="cambio">
-            </th>
-            <th>
-                <input type="date" class="form-control" value="{{e_venta.fecha}}" name="fecha">
-            </th>
-            <th>
-                <button  type="submit" class="editar btn btn-primary"> Editar</button>
-                <a href="{{url_for('elive',venta_name=e_venta.usuario)}}" class="eliminar btn btn-danger ">Eliminar</a>
-            </th>
-        </tbody>
-    </table>
+        <table id="myTable" class="table">
+            <thead>
+                <tr>
+                    <th>
+                        Usuario
+                    </th>
+                    <th>
+                        Cliente
+                    </th>
+                    <th>
+                        Marca
+                    </th>
+                    <th>
+                        Categoria
+                    </th>
+                    <th>
+                        Precio por unidad de la pieza
+                    </th>
+                    <th>
+                        Precio de Mano de obra
+                    </th>
+                    <th>
+                        Fecha
+                    </th>
+                    <th>
+                        Acciones
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for e_venta in ventas %}
+                <tr>
+                    <td>
+                        {{e_venta.usuario}}
+                    </td>
+                    <td>
+                        {{e_venta.cliente}}
+                    </td>
+                    <td>
+                            {{e_venta.marca}}
+                    </td>
+                    <td>
+                        {{e_venta.categoria}}
+                    </td>
+                    <td>
+                        {{e_venta.precio}}
+                    </td>
+                    <td>
+                        {{e_venta.cambio}}
+                    </td>
+                    <td>
+                        {{e_venta.fecha}}
+                    </td>
+                    <td>
+                        <button type="submit" class="editar btn btn-primary">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-pencil-square" viewBox="0 0 16 16">
+                            <path
+                                d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                            <path fill-rule="evenodd"
+                                d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
+                        </svg>
+                        </button>
+                        <a href="{{url_for('elive',venta_name=e_venta.usuario)}}"
+                            class="eliminar btn btn-danger ">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-trash2-fill" viewBox="0 0 16 16">
+                            <path
+                                d="M2.037 3.225A.7.7 0 0 1 2 3c0-1.105 2.686-2 6-2s6 .895 6 2a.7.7 0 0 1-.037.225l-1.684 10.104A2 2 0 0 1 10.305 15H5.694a2 2 0 0 1-1.973-1.671zm9.89-.69C10.966 2.214 9.578 2 8 2c-1.58 0-2.968.215-3.926.534-.477.16-.795.327-.975.466.18.14.498.307.975.466C5.032 3.786 6.42 4 8 4s2.967-.215 3.926-.534c.477-.16.795-.327.975-.466-.18-.14-.498-.307-.975-.466z" />
+                        </svg>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+</div>
+<div id="editModal" title="Editar Ventas">
+    <form id="editForm" action="" method="post">
+        <div class="">
+            <label for="">Usuario</label>
+            <input type="text" class="form-control" id="usuario" name="usuario">
+            <label for="">Cliente</label>
+            <input type="text" class="form-control" id="cliente" name="cliente">
+            <label for="">Marca</label>
+            <select name="marca" id="marca" class="form-control">
+                <option value="Hifly">Hifly</option>
+                <option value="Onix">Onix</option>
+                <option value="Sunful">Sunful</option>
+                <option value="Terraking">Terraking</option>
+                <option value="Sin nombre">Sin nombre</option>
+            </select>
+            <label for="">Categoria</label>
+            <select name="categoria" id="categoria" class="form-control">
+                <option value="Llantas">Llantas</option>
+                <option value="Pernos">Pernos</option>
+                <option value="Cauchos">Cauchos</option>
+                <option value="Tubos">Tubos</option>
+                <option value="Aros">Aros</option>
+            </select>
+            <label for="">Precio</label>
+            <input type="number"  class="form-control"  id="precio" name="precio">
+            <label for="">Cambio</label>
+            <input type="number"  class="form-control"  id="cambio" name="cambio">
+            <label for="">Fecha</label>
+            <input type="date" class="form-control"  id="fecha" name="fecha">
+        </div>
     </form>
-    {% endfor %}
 </div>
 <script>
     $(document).ready(function () {
-        $("#filtro").on("keyup", function () {
-            var value = $(this).val().toLowerCase();
-            $("tbody[data-usuario]").filter(function () {
-                $(this).parent().toggle($(this).data("usuario").toLowerCase().indexOf(value) > -1)
-            });
+        $('#myTable').DataTable({
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
+            }
+        });
+
+        var table = $('#myTable').DataTable();
+        //Cambio de english a spanish
+        // Funcionalidad de edición
+        table.on('click', '.editar', function () {
+            var row = $(this).closest('tr');
+            var data = table.row(row).data();
+            // Aquí puedes abrir el modal y llenar los campos del formulario con los datos del usuario
+            // Por ejemplo:
+            $('#usuario').val(data[0]);
+            $('#cliente').val(data[1]);
+            $('#marca').val(data[2]);
+            $('#categoria').val(data[3]);
+            $('#precio').val(data[4]);
+            $('#cambio').val(data[5]);
+            $('#fecha').val(data[6]);
+            $('#editForm').attr('action', '/edit_venta/' + data[0]);
+            $('#editModal').dialog('open');
+        });
+        // Inicializar el modal
+        $('#editModal').dialog({
+            autoOpen: false,
+            modal: true,
+            buttons: [
+                {
+                    text: 'Guardar',
+                    click: function () {
+                        $('#editForm').submit();
+                    },
+                    // Agregar una clase al botón
+                    class: 'guardar'
+                },
+                {
+                    text: 'Cancelar',
+                    click: function () {
+                        $(this).dialog('close');
+                    },
+                    // Agregar una clase al botón
+                    class: 'cancelar'
+                }
+            ]
         });
     });
 
     //  Este es oara preguntar de la edicion y eliminacion
     $(document).ready(function () {
-        $(".editar").click(function (event) {
-            if (!confirm("¿Estás seguro de que quieres editar?")) {
-                event.preventDefault();
-            }
-        });
 
         $(".eliminar").click(function (event) {
             if (!confirm("¿Estás seguro de que quieres eliminar?")) {

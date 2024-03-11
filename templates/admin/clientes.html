@@ -1,24 +1,20 @@
 {% extends "admin/layout.html" %}
 {% block content %}
-<div class="form-container">
-    <br>
-    <h1 style="text-align: center;">Ingresar clientes</h1>
-    <br>
-    <form action="/admin/clientes" method="post">
-        <div class="container">
-            <input type="text" class="form-control" id="exampleFormControlInput1" name="nombre" placeholder="Nombre">
-            <br>
-            <input type="text" class="form-control" id="exampleFormControlInput1" name="direccion"
-                placeholder="Direccion">
-            <br>
-            <input type="number" class="form-control" id="miInput" oninput="limitarEntrada()" name="cedula"
-                placeholder="Cedula">
-            <br>
-            <button type="submit" class="btn btn-primary"> Enviar</button>
-        </div>
+<div class="container">
+    <form action="/admin/clientes" id="contact" method="post">
+        <h3>Ingresar Clientes</h3>
+        <h4>Todos los campos son obligatorios </h4>
+        <fieldset>
+            <input placeholder="Ingresar nombre" type="text" id="miInput"  name="nombre" tabindex="1" required autofocus>
+        </fieldset>
+        <fieldset>
+            <input placeholder="Ingresar direccion" type="text" id="miInput"  name="direccion" tabindex="1" required autofocus>
+        </fieldset>
+        <fieldset>
+            <input placeholder="Ingresar numero de cedula" type="number" oninput="limitarEntrada()" id="miInput"  name="cedula" tabindex="1" required autofocus>
+        </fieldset>
+        <button type="submit" class="btn btn-primary"> Enviar</button>
     </form>
 </div>
-
-
 <script src="/static/js/cliente.js"></script>
 {% endblock %}

@@ -1,20 +1,22 @@
 {% extends "admin/layout.html" %}
 {% block content %}
-<div class="form-container">
-    <h1 style="text-align: center;">Ingresado de Productos</h1>
-    <br>
-    <form action="/admin/producto" method="post">
-        <div class="container">
-            <input type="number" name="codigo" class="form-control"  placeholder="Codigo">
-            <br>
-            <select name="marca" id="" class="form-control">
+<div class="container">
+    <form id="contact" action="/admin/producto" method="post">
+        <h3>Ingresado de Productos</h3>
+        <h4>Todos los campos son obligatorios </h4>
+        <fieldset>
+            <input placeholder="Ingresar codigo" type="number" name="codigo" id="miInput"   tabindex="1" required autofocus>
+        </fieldset>
+        <fieldset>
+            <select name="marca" id="select" class="form-control" tabindex="2">
                 <option value="Hifly">Hifly</option>
                 <option value="Onix">Onix</option>
                 <option value="Sunful">Sunful</option>
                 <option value="Terraking">Terraking</option>
                 <option value="Sin nombre">Sin nombre</option>
             </select>
-            <br>
+        </fieldset>
+        <fieldset>
             <select name="categoria" id="" class="form-control">
                 <option value="Llantas">Llantas</option>
                 <option value="Pernos">Pernos</option>
@@ -22,14 +24,16 @@
                 <option value="Tubos">Tubos</option>
                 <option value="Aros">Aros</option>
             </select>
-            <br>
-            <input type="number" name="cantidad" class="form-control" 
-                placeholder="Cantidad">
-            <br>
-            <input type="number" step="0.01"  name="precio" class="form-control"  placeholder="Precio">
-            <br>
-            <button type="submit" class="btn btn-primary">Enviar</button>
-        </div>
+        </fieldset>
+        <fieldset>
+            <input  type="number" placeholder="Ingreso de cantidad"  name="cantidad" tabindex="3" required  >
+        </fieldset>
+        <fieldset>
+            <input placeholder="Ingreso de Precio" type="number" id="number" name="precio" tabindex="4" required>
+        </fieldset>
+        <fieldset>
+            <button  type="submit" id="contact-submit" >Enviar</button>
+        </fieldset>
     </form>
 </div>
 <script src="/static/js/producto.js">

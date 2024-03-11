@@ -1,3 +1,8 @@
 body {
-    background: white url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10"><rect width="10" height="10" fill="white"/><rect width="1" height="1" fill="gray"/></svg>') repeat;
+    font-family: "Open Sans", Helvetica, Arial, sans-serif;
+    font-weight: 300;
+    font-size: 12px;
+    line-height: 30px;
+    color: #777;
+    background: #0cf;
 }

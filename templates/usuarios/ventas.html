@@ -1,50 +1,54 @@
 {% extends "usuarios/layout.html" %}
 {% block content %}
-<div class="form-container">
-    <br>
-    <h1 style="text-align: center;">Ingresado de Ventas</h1>
-    <form action="/usuarios/ventas" method="POST">
-        <div class="container">
-        <label for="" class="form-control"> Usuario
+<div class="container">
+    <form id="contact" action="/usuarios/ventas" method="post">
+        <h3>Ingresado de Ventas</h3>
+        <h4>Todos los campos son obligatorios </h4>
+        <fieldset>
+            <label for="">Ingreso de Usuarios</label>
+            <br>
             <input type="text"  name="usuario" value="{{ usuario }}" readonly>
-        </label>   
-        </label>
-        <label for="" class="form-control"> Cliente
-            <select name="cliente">
+        </fieldset>
+        <fieldset>
+            <label for="">Ingreso de Clientes</label>
+            <br>
+            <select name="cliente" class="" >
                 {% for cliente in clientes %}
                 <option value="{{ cliente }}">{{ cliente }}</option>
                 {% endfor %}
             </select>
-        </label>
-        <label for="" class="form-control"> Producto
-            <select name="marca">
+        </fieldset>
+        <fieldset>
+            <label for="">Ingresa de Productos </label>
+            <br>
+            <select name="marca" class="form-control form-control-lg">
                 {% for producto in productos %}
                 <option value="{{ producto }}">{{ producto }}</option>
                 {% endfor %}
             </select>
-        </label>
-        <label for="" class="form-control" > Categoria
-            <select name="categoria">
+        </fieldset>
+        <fieldset>
+            <label for="">Ingresa de Categorias</label>
+            <br>
+            <select name="categoria" class="form-control form-control-lg">
                 {% for categoria in categorias %}
                     <option value="{{ categoria }}">{{ categoria }}</option>
                 {% endfor %}
             </select>
-        </label>
-        <label for="" class="form-control">Precio por unidad de la pieza
-            <input  type="number" step="0.01" name="precio">
-        </label>
-        <label for="" class="form-control">Valor de mano de obra
-            <input  type="number" step="0.01" name="cambio">
-        </label>
-        <label for="" class="form-control">Fecha
-            <input type="date" id="fecha"  name="fecha">
-        </label>
-        <br>
-        <button type="submit" class="btn btn-primary">Enviar</button>
-    </div>
-    
-    
-    
-</form>
+        </fieldset>
+        <fieldset>
+            <input placeholder="Ingreso de Precio" type="number" id="number" name="precio" tabindex="4" required>
+        </fieldset>
+        <fieldset>
+            <input placeholder="Ingreso de Mano de Obra" type="number" id="number" name="cambio" tabindex="4" required>
+        </fieldset>
+        <fieldset>
+            <input placeholder="Ingreso de Fecha" type="date" id="fecha" name="fecha" tabindex="4" required>
+        </fieldset>
+        <fieldset>
+            <button  type="submit" id="contact-submit" >Enviar</button>
+        </fieldset>
+    </form>
+</div>
 <script src="/static/js/ventas_user.js"></script>
 {% endblock %}

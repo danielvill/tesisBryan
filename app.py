@@ -14,6 +14,14 @@ db = dbase()
 app = Flask(__name__)
 app.secret_key = 'mecanicajulio'
 
+
+@app.route('/logout')
+def logout():
+    # Elimina el usuario de la sesión si está presente
+    session.pop('username', None)
+    return redirect(url_for('index'))
+
+
 # Esta me direcciona al index.html
 @app.route('/',methods=['GET','POST'])
 def principal():
@@ -29,8 +37,10 @@ def index():
         usuario_found2= db.usuarios.find_one({'usuario':usuario,'contraseña':contra})#Este modulo es para el usuario  
         if usuario_found:
             session['usuario'] = usuario
+            session["username"]= usuario_found["usuario"]
             return redirect(url_for('client'))
         elif usuario_found2:
+            session["username"]= usuario_found2["usuario"]
             session['usuario'] = usuario
             return redirect(url_for('useclient'))
         else:
@@ -44,6 +54,10 @@ def index():
 
 @app.route('/admin/in_mecanicos',methods=['GET','POST'])
 def login():
+    # Verifica si el usuario está en la sesión
+    if 'username' not in session:
+        flash("Inicia sesion con tu usuario y contraseña")
+        return redirect(url_for('index'))
     if request.method =='POST': 
         registrar =db["usuarios"]
         cedula=request.form["cedula"]
@@ -64,6 +78,10 @@ def login():
 #Administrador modulo de ingresado de clientes
 @app.route('/admin/clientes',methods=['GET','POST'])
 def client():
+    # Verifica si el usuario está en la sesión
+    if 'username' not in session:
+        flash("Inicia sesion con tu usuario y contraseña")
+        return redirect(url_for('index'))
     if request.method == 'POST':
         clientes = db['clientes']
         nombre= request.form["nombre"]
@@ -80,6 +98,10 @@ def client():
 #Ingresado de Productos
 @app.route('/admin/producto',methods=['GET','POST'])
 def producto():
+    # Verifica si el usuario está en la sesión
+    if 'username' not in session:
+        flash("Inicia sesion con tu usuario y contraseña")
+        return redirect(url_for('index'))
     if request.method == 'POST':      
         producto =db['productos']
         codigo=request.form["codigo"]
@@ -98,6 +120,10 @@ def producto():
 # Ingresado de Ventas
 @app.route('/admin/ventas',methods=['GET','POST'])
 def ventas():
+    # Verifica si el usuario está en la sesión
+    if 'username' not in session:
+        flash("Inicia sesion con tu usuario y contraseña")
+        return redirect(url_for('index'))
     if request.method == 'POST':
             venta =db['ventas']
             usuario=request.form["usuario"]
@@ -236,6 +262,10 @@ def formatear_fecha(reportes):
 #Vista de Reportes de todas las ventas que se hace por completo
 @app.route('/admin/reportes')
 def reporte():
+    # Verifica si el usuario está en la sesión
+    if 'username' not in session:
+        flash("Inicia sesion con tu usuario y contraseña")
+        return redirect(url_for('index'))
     reportes = db.ventas.find()
     fechas_formateadas, sumas_como_cadenas = formatear_fecha(reportes)
     return render_template('admin/reportes.html', ventas=reportes, fechas=fechas_formateadas, sumas=sumas_como_cadenas)
@@ -264,7 +294,7 @@ def editus(user_name):
     contraseña = request.form['contraseña']
     
     if cedula and usuario and rol and email and contraseña:
-        user.update_one({'usuario':user_name},{'$set':{'cedula':cedula,'usuario':usuario,'rol':rol,'correo':email,'contraseña':contraseña}})
+        user.update_one({'cedula':user_name},{'$set':{'cedula':cedula,'usuario':usuario,'rol':rol,'correo':email,'contraseña':contraseña}})
         return redirect(url_for('visuser'))
     else:
         return render_template("admin/v_user.html")
@@ -307,6 +337,10 @@ def v_ventas():
 # * Vista ventas de todos los usuarios para Poder editarlos
 @app.route('/admin/e_venta')
 def e_venta():
+    # Verifica si el usuario está en la sesión
+    if 'username' not in session:
+        flash("Inicia sesion con tu usuario y contraseña")
+        return redirect(url_for('index'))
     venta =db.ventas.find()
     return render_template('admin/e_venta.html',ventas=venta )
 
@@ -338,6 +372,10 @@ def editve(venta_name):
 # Vista de reportes diarios de todos lo mecanicos
 @app.route('/admin/rep_diario')
 def repodia(): 
+        # Verifica si el usuario está en la sesión
+        if 'username' not in session:
+            flash("Inicia sesion con tu usuario y contraseña")
+            return redirect(url_for('index'))
         # Obtener todas las ventas de la colección 'ventas'
         ventas = db.ventas.find()
         
@@ -374,7 +412,10 @@ def repodia():
 #Admin Vista de Reportes semanales
 @app.route('/admin/rep_semanal')
 def reposemana(): 
-
+     # Verifica si el usuario está en la sesión
+    if 'username' not in session:
+        flash("Inicia sesion con tu usuario y contraseña")
+        return redirect(url_for('index'))
     # Obtener todas las ventas de la colección 'ventas'
     ventas = db.ventas.find()
     
@@ -411,11 +452,15 @@ def reposemana():
     return render_template('admin/rep_semanal.html', usuarios_ordenados=usuarios_ordenados)
 
 
-#*Carpetas Usuarios
+#*---------------------- Carpetas Usuarios ----------------------------------
 
 #Ingresado de Clientes los mecanicos
 @app.route('/usuarios/clientes' ,methods=['GET','POST'])
 def useclient():
+    # Verifica si el usuario está en la sesión
+    if 'username' not in session:
+        flash("Inicia sesion con tu usuario y contraseña")
+        return redirect(url_for('index'))
     if request.method == 'POST':
         clientes= db['clientes']
         nombre= request.form["nombre"]
@@ -449,6 +494,10 @@ def editcluse(client_name):
 #Carpetas Usuarios para mostrar los clientes 
 @app.route('/usuarios/e_client')
 def vuse_cliente():
+    # Verifica si el usuario está en la sesión
+    if 'username' not in session:
+        flash("Inicia sesion con tu usuario y contraseña")
+        return redirect(url_for('index'))
     cliente = db.clientes.find()
     return render_template('usuarios/e_client.html', clientes=cliente)
 
@@ -458,6 +507,10 @@ def vuse_cliente():
 
 @app.route('/usuarios/ventas', methods=['GET', 'POST'])
 def useventa():
+    # Verifica si el usuario está en la sesión
+    if 'username' not in session:
+        flash("Inicia sesion con tu usuario y contraseña")
+        return redirect(url_for('index'))
     if "usuarios" in session:    
         if request.method == 'POST':
             ventas= db['ventas']
@@ -480,6 +533,10 @@ def useventa():
 #Carpeta vista de productos
 @app.route('/usuarios/e_produc')
 def vuse_producto():
+    # Verifica si el usuario está en la sesión
+    if 'username' not in session:
+        flash("Inicia sesion con tu usuario y contraseña")
+        return redirect(url_for('index'))
     producto = db.productos.find()
     return render_template('usuarios/e_produc.html', productos=producto)    
 

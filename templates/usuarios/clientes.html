@@ -1,23 +1,20 @@
 {% extends "usuarios/layout.html" %}
 {% block content %}
-
-
-<div class="form-container">
-    <br>
-    <h1 style="text-align: center;">Ingresar clientes</h1>
-    <br>
-<form action="/usuarios/clientes" method="post">
-    <div class="container">
-        <input type="text" class="form-control" id="exampleFormControlInput1" name="nombre" placeholder="Nombre">
-        <br>
-        <input type="text" class="form-control" id="exampleFormControlInput1" name="direccion" placeholder="Direccion">
-        <br>
-        <input type="number" class="form-control" id="miInput" oninput="limitarEntrada()" name="cedula" placeholder="Cedula ">
-        <br>
+<div class="container">
+    <form action="/usuarios/clientes" id="contact" method="post">
+        <h3>Ingresar Clientes</h3>
+        <h4>Todos los campos son obligatorios </h4>
+        <fieldset>
+            <input placeholder="Ingresar nombre" type="text" id="miInput"  name="nombre" tabindex="1" required autofocus>
+        </fieldset>
+        <fieldset>
+            <input placeholder="Ingresar direccion" type="text" id="miInput"  name="direccion" tabindex="1" required autofocus>
+        </fieldset>
+        <fieldset>
+            <input placeholder="Ingresar numero de cedula" type="number" oninput="limitarEntrada()" id="miInput"  name="cedula" tabindex="1" required autofocus>
+        </fieldset>
         <button type="submit" class="btn btn-primary"> Enviar</button>
-    </div>
-</form>
+    </form>
 </div>
-
 <script src="/static/js/validaruser/user_ingresar.js"></script>
 {% endblock %}

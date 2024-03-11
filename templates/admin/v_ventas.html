@@ -1,30 +1,94 @@
 {% extends "admin/layout.html" %}
 {% block content %}
-
 <div class="container">
-    <h1 style="text-align: center;">Ventas Mensuales</h1>
     <table id="example" class="display" style="width:100%">
         <thead>
-        <tr>
-            <th>Mecánico</th>
-            <th>Ventas</th>
-            <th>Fecha</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for usuario, datos in usuarios_ordenados %}
-        <tr>
-            <td>{{ usuario }}</td>
-            <td>{{ datos['ventas'] }}</td>
-            <td>{{ datos['fecha'] }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
+            <tr>
+                <th>Mecánico</th>
+                <th>Ventas</th>
+                <th>Fecha</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for usuario, datos in usuarios_ordenados %}
+            <tr>
+                <td>{{ usuario }}</td>
+                <td>{{ datos['ventas'] }}</td>
+                <td>{{ datos['fecha'] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
     </table>
 </div>
+<div class="container">
+    <canvas id="myChart"></canvas>
+</div>
 <script>
- //Cambio de english a spanish
- $(document).ready(function () {
+    // Primero, seleccionamos la tabla y extraemos los datos
+    var tabla = document.getElementById('example');
+    var filas = Array.from(tabla.getElementsByTagName('tr'));
+
+    // Eliminamos la primera fila (encabezados)
+    filas.shift();
+
+    // Extraemos los datos
+    var datos = filas.map(function (fila) {
+        var celdas = fila.getElementsByTagName('td');
+        return {
+            usuario: celdas[0].textContent,
+            ventas: Number(celdas[1].textContent),
+            fecha: celdas[2].textContent
+        };
+    });
+
+    // Extraemos las ventas y las fechas
+    var usuarios = datos.map(function (d) { return d.usuario; });
+    var ventas = datos.map(function (d) { return d.ventas; });
+    var fechas = datos.map(function (d) { return d.fecha; });
+
+    // Creamos el gráfico
+var ctx = document.getElementById('myChart').getContext('2d');
+var chart = new Chart(ctx, {
+  type: 'bar', // Change the chart type to 'bar'
+  data: {
+    labels: fechas,
+    datasets: [{
+      label: 'Ventas',
+      data: ventas,
+      backgroundColor: [
+        'rgba(255, 99, 132, 0.2)', // Customize bar colors here
+        'rgba(54, 162, 235, 0.2)',
+        'rgba(255, 206, 86, 0.2)',
+        'rgba(75, 192, 192, 0.2)',
+        'rgba(153, 102, 255, 0.2)',
+        'rgba(255, 159, 64, 0.2)'
+      ],
+      hoverBackgroundColor: [
+        'rgba(255, 99, 132, 1)', // Customize hover colors here
+        'rgba(54, 162, 235, 1)',
+        'rgba(255, 206, 86, 1)',
+        'rgba(75, 192, 192, 1)',
+        'rgba(153, 102, 255, 1)',
+        'rgba(255, 159, 64, 1)'
+      ],
+      borderColor: 'rgba(75, 192, 192, 1)', // Border color for bars
+      borderWidth: 1 // Border width for bars
+    }]
+  },
+  options: {
+    scales: {
+      x: {
+        beginAtZero: true // Start x-axis at 0 for better visualization
+      },
+      y: {
+        beginAtZero: true // Start y-axis at 0 for better visualization
+      }
+    }
+  }
+});
+
+    //Cambio de english a spanish
+    $(document).ready(function () {
         $('#example').DataTable({
             "language": {
                 "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"

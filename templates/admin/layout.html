@@ -5,9 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mecanica</title>
+    <link rel="stylesheet" href="/static/css/form.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="/static/css/menu.css">
     <link rel="stylesheet" href="/static/css/producto.css">
+    <link rel="stylesheet" href="/static/css/modal.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />
     <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
@@ -16,6 +18,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 </head>
 
 <body>
@@ -33,7 +37,7 @@
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="./in_mecanicos">Mecanicos</a>
-                        <a class="dropdown-item" href="./v_user">Editar Mecanicos</a>
+                        <a class="dropdown-item" href="./v_user">Visualizar Mecanicos</a>
                     </div>
                 </li>
                 <li class="nav-item dropdown">
@@ -42,7 +46,7 @@
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="./clientes">Cliente</a>
-                        <a class="dropdown-item" href="./e_client">Editar Clientes</a>
+                        <a class="dropdown-item" href="./e_client">Visualizar Clientes</a>
                     </div>
                 </li>
                 <li class="nav-item dropdown">
@@ -51,7 +55,7 @@
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="./producto">Productos</a>
-                        <a class="dropdown-item" href="./e_produc">Editar Productos</a>
+                        <a class="dropdown-item" href="./e_produc">Visualizar Productos</a>
                     </div>
                 </li>
                 <li class="nav-item dropdown">
@@ -60,7 +64,7 @@
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="./ventas">Ventas</a>
-                        <a class="dropdown-item" href="./e_venta">Editar Ventas</a>
+                        <a class="dropdown-item" href="./e_venta">Visualizar Ventas</a>
                     </div>
                 </li>
                 <li class="nav-item dropdown">
@@ -75,6 +79,8 @@
                     </div>
                 </li>
             </ul>
+            <br>
+            <a href="{{ url_for('logout') }}"> Cerrar Sesion</a>
         </div>
         <img src="https://th.bing.com/th/id/OIP.sOJ3OHUOvI2iJjphUTSLLAHaHa?w=173&h=180&c=7&r=0&o=5&pid=1.7" alt=""
             width="50" height="50">

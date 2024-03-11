@@ -1,59 +1,121 @@
 {% extends "admin/layout.html" %}
 {% block content %}
-
-
 <div class="container">
-   <div class="input-group flex-nowrap">
-      <span class="input-group-text" id="addon-wrapping">
-         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search"
-            viewBox="0 0 16 16">
-            <path
-               d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
-         </svg>
-      </span>
-      <input type="search" id="filtro" class="form-control" placeholder="Busqueda" aria-label="Username"
-         aria-describedby="addon-wrapping">
-   </div>
-   {% for visuser in usuarios %}
-   <form action="/edit_use/{{visuser.usuario}}" method="post">
-
-      <table>
-         <thead>
-            <tr>
-               <th>Cedula</th>
-               <th>Nombre</th>
-               <th>Rol</th>
-               <th>Correo</th>
-               <th>Contraseña</th>
-               <th>Acciones</th>
-            </tr>
-         </thead>
-         <tbody data-nombre="{{visuser.usuario}}">
-            <th>
-               <input type="number" class="form-control" id="miInput" value="{{visuser.cedula}}" name="cedula"
-                  oninput="limitarEntrada()" placeholder="Cedula o Ruc">
-            </th>
-            <th>
-               <input type="text" class="form-control" value="{{visuser.usuario}}" name="usuario" placeholder="Nombre">
-            </th>
-            <th>
-               <input type="text" class="form-control" value="{{visuser.rol}}" name="rol" placeholder="Rol" readonly>
-            </th>
-            <th>
-               <input type="text" class="form-control" value="{{visuser.correo}}"  name="correo" placeholder="Correo">
-            </th>
-            <th>
-               <input type="text" class="form-control" id="exampleFormControlInput1" value="{{visuser.contraseña}}"
-                  name="contraseña" placeholder="Password">
-            </th>
-            <th><button type="submit" class=" editar btn btn-primary"> Editar</button>
-               <a href="{{url_for('eliuser',user_name=visuser.usuario)}}" class="eliminar btn btn-danger ">Eliminar</a>
-            </th>
-         </tbody>
-      </table>
-   </form>
-   {% endfor %}
+   <table id="myTable" class="table">
+      <thead>
+         <tr>
+            <th>Cedula</th>
+            <th>Nombre</th>
+            <th>Rol</th>
+            <th>Correo</th>
+            <th>Contraseña</th>
+            <th>Acciones</th>
+         </tr>
+      </thead>
+      <tbody>
+         {% for visuser in usuarios %}
+         <tr>
+            <td>
+               {{visuser.cedula}}
+            </td>
+            <td>
+               {{visuser.usuario}}
+            </td>
+            <td>
+               {{visuser.rol}}
+            </td>
+            <td>
+               {{visuser.correo}}
+            </td>
+            <td>
+               {{visuser.contraseña}}
+            </td>
+            <td><button type="submit" class=" editar btn btn-primary">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                     class="bi bi-pencil-square" viewBox="0 0 16 16">
+                     <path
+                        d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                     <path fill-rule="evenodd"
+                        d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
+                  </svg>
+               </button>
+               <a href="{{url_for('eliuser',user_name=visuser.usuario)}}" class="eliminar btn btn-danger ">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                     class="bi bi-trash2-fill" viewBox="0 0 16 16">
+                     <path
+                        d="M2.037 3.225A.7.7 0 0 1 2 3c0-1.105 2.686-2 6-2s6 .895 6 2a.7.7 0 0 1-.037.225l-1.684 10.104A2 2 0 0 1 10.305 15H5.694a2 2 0 0 1-1.973-1.671zm9.89-.69C10.966 2.214 9.578 2 8 2c-1.58 0-2.968.215-3.926.534-.477.16-.795.327-.975.466.18.14.498.307.975.466C5.032 3.786 6.42 4 8 4s2.967-.215 3.926-.534c.477-.16.795-.327.975-.466-.18-.14-.498-.307-.975-.466z" />
+                  </svg>
+               </a>
+            </td>
+         </tr>
+         {% endfor %}
+      </tbody>
+   </table>
 </div>
+<div id="editModal" title="Editar Mecanicos">
+   <form id="editForm" action="" method="post">
+      <div class="">
+         <label for="">Cedula</label>
+         <input type="text" id="cedula" name="cedula" class="form-control">
+         <label for="">Nombre</label>
+         <input type="text" id="usuario" name="usuario" class="form-control">
+         <label for="rol">Rol</label>
+         <input type="text" id="rol" name="rol" value="mecanico" class="form-control" readonly>
+         <label for="rol">Correo</label>
+         <input type="email" id="correo" name="correo" class="form-control">
+         <label for="">Contraseña</label>
+         <input type="text" id="contraseña" name="contraseña" class="form-control">
+      </div>
+   </form>
+</div>
+<script>
+   $(document).ready(function () {
+      $('#myTable').DataTable({
+         "language": {
+            "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
+         }
+      });
 
+      var table = $('#myTable').DataTable();
+      //Cambio de english a spanish
+      // Funcionalidad de edición
+      table.on('click', '.editar', function () {
+         var row = $(this).closest('tr');
+         var data = table.row(row).data();
+         // Aquí puedes abrir el modal y llenar los campos del formulario con los datos del usuario
+         // Por ejemplo:
+         $('#cedula').val(data[0]);
+         $('#usuario').val(data[1]);
+         $('#rol').val(data[2]);
+         $('#correo').val(data[3]);
+         $('#contraseña').val(data[4]);
+         $('#editForm').attr('action', '/edit_use/' + data[0]);
+         $('#editModal').dialog('open');
+      });
+      // Inicializar el modal
+      $('#editModal').dialog({
+         autoOpen: false,
+         modal: true,
+         buttons: [
+            {
+               text: 'Guardar',
+               click: function () {
+                  $('#editForm').submit();
+               },
+               // Agregar una clase al botón
+               class: 'guardar'
+            },
+            {
+               text: 'Cancelar',
+               click: function () {
+                  $(this).dialog('close');
+               },
+               // Agregar una clase al botón
+               class: 'cancelar'
+            }
+         ]
+      });
+   });
+</script>
 <script src="/static/js/validaradmin/editmecanico.js"></script>
 {% endblock %}

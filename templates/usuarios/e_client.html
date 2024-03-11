@@ -1,53 +1,102 @@
 {% extends "usuarios/layout.html" %}
 {% block content %}
-
 <div class="container">
-  <div class="input-group flex-nowrap">
-    <span class="input-group-text" id="addon-wrapping">
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search"
-        viewBox="0 0 16 16">
-        <path
-          d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
-      </svg>
-    </span>
-    <input type="search" id="filtro" class="form-control" placeholder="Busqueda" aria-label="Username"
-      aria-describedby="addon-wrapping">
-  </div>
-
-
-  {% for vuse_cliente in clientes %}
-  <form action="/edit_cliusu/{{vuse_cliente.nombre}}" method="POST">
-    <table class="table">
+  <table id="myTable" class="table">
       <thead>
-        <tr>
-          <th scope="">Nombre</th>
-          <th>Direccion</th>
-          <th>Cedula o Ruc</th>
-          <th>Acciones</th>
-        </tr>
+          <tr>
+              <th>Nombre</th>
+              <th>Direccion</th>
+              <th>Cedula </th>
+              <th>Acciones</th>
+          </tr>
       </thead>
-      <tbody data-nombre="{{ vuse_cliente.nombre}}">
-        <tr>
-          <td>
-            <input type="text" class="form-control" value="{{vuse_cliente.nombre}}" name="nombre" placeholder="Nombre">
-          </td>
-          <td>
-            <input type="text" class="form-control" value="{{vuse_cliente.direccion}}" name="direccion"
-              placeholder="Direccion">
-          </td>
-          <td>
-            <input type="number" class="form-control" id="miInput" value="{{vuse_cliente.cedula}}" name="cedula"
-              oninput="limitarEntrada()" placeholder="Cedula o Ruc">
-          </td>
-          <td>
-            <button type="submit" class="editar btn btn-primary"> Editar</button>
-          </td>
-        </tr>
+      <tbody>
+          {% for client in clientes %}
+          <tr>
+              <td>
+                  {{client.nombre}}
+              </td>
+              <td>
+                  {{client.direccion}}
+              </td>
+              <td>
+                  {{client.cedula}}
+              </td>
+              <td>
+                  <button class="editar btn btn-primary" type="submit">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                          class="bi bi-pencil-square" viewBox="0 0 16 16">
+                          <path
+                              d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                          <path fill-rule="evenodd"
+                              d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
+                      </svg>
+                  </button>
+              </td>
+          </tr>
+          {% endfor %}
       </tbody>
-    </table>
-  </form>
-  {% endfor %}
+  </table>
 </div>
+<div id="editModal" title="Editar Clientes">
+  <form id="editForm" action="" method="post">
+      <div class="">
+          <label for="">Nombre</label>
+          <input type="text" id="nombre" name="nombre" class="form-control">
+          <label for="">Direccion</label>
+          <input type="text" id="direccion" name="direccion" class="form-control">
+          <label for="rol">Cedula</label>
+          <input type="text" id="cedula" name="cedula" class="form-control">
+      </div>
+  </form>
+</div>
+<script>
+  $(document).ready(function () {
+      $('#myTable').DataTable({
+          "language": {
+              "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
+          }
+      });
+
+      var table = $('#myTable').DataTable();
+      //Cambio de english a spanish
+      // Funcionalidad de edición
+      table.on('click', '.editar', function () {
+          var row = $(this).closest('tr');
+          var data = table.row(row).data();
+          // Aquí puedes abrir el modal y llenar los campos del formulario con los datos del usuario
+          // Por ejemplo:
+          $('#nombre').val(data[0]);
+          $('#direccion').val(data[1]);
+          $('#cedula').val(data[2]);
+          $('#editForm').attr('action', '/edit_cliusu/' + data[0]);
+          $('#editModal').dialog('open');
+      });
+      // Inicializar el modal
+      $('#editModal').dialog({
+          autoOpen: false,
+          modal: true,
+          buttons: [
+              {
+                  text: 'Guardar',
+                  click: function () {
+                      $('#editForm').submit();
+                  },
+                  // Agregar una clase al botón
+                  class: 'guardar'
+              },
+              {
+                  text: 'Cancelar',
+                  click: function () {
+                      $(this).dialog('close');
+                  },
+                  // Agregar una clase al botón
+                  class: 'cancelar'
+              }
+          ]
+      });
+  });
+</script>
 <script src="/static/js/validaruser/user_editar.js">
 </script>
 {% endblock %}
