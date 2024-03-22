@@ -21,31 +21,36 @@ document.querySelectorAll('form').forEach(function(form) {
     form.addEventListener('submit', function (e) {
         var cedula = form.querySelector('input[name="cedula"]').value;
         if (!validarCedula(cedula)) {
-            alert('La cédula ingresada no es válida');
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Cedula no valida'
+            });
             e.preventDefault(); // Previene el envío del formulario
         }
     });
 });
 
 
-// Este es oara preguntar de la edicion y eliminacion
-$(document).ready(function () {
-    $(".eliminar").click(function (event) {
-        if (!confirm("¿Estás seguro de que quieres eliminar?")) {
-            event.preventDefault();
+$(".eliminar").click(function (event) {
+    event.preventDefault();
+    var url = $(this).attr('href'); // Guarda la URL del enlace
+    Swal.fire({
+        title: '¿Estás seguro?',
+        text: "¿Estás seguro de que quieres eliminar?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, eliminar!',
+        cancelButtonText: 'No, cancelar!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = url; // Navega a la URL del enlace
         }
     });
 });
 
-// Filtro para visualizar la edicion
-$(document).ready(function () {
-    $("#filtro").on("keyup", function () {
-        var value = $(this).val().toLowerCase();
-        $("tbody[data-nombre]").filter(function () {
-            $(this).parent().toggle($(this).data("nombre").toLowerCase().indexOf(value) > -1)
-        });
-    });
-});
 
 
 $(document).ready(function () {
@@ -57,7 +62,11 @@ $(document).ready(function () {
         for (let i = 0; i < usuarios.length; i++) {
             let correo = usuarios[i].querySelector('[name="correo"]').value;
             if (!regex.test(correo)) {
-                alert('Por favor, ingresa un correo válido para el usuario ' + usuarios[i].getAttribute('data-nombre'));
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Ingresa un correo valido'
+                });
                 return false;
             }
         }

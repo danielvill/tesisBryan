@@ -66,12 +66,20 @@ def login():
         email=request.form["correo"]
         contra=request.form["contraseña"]
 
-        if cedula and usuari and roles and email and contra:
+        existing_cedula = registrar.find_one({'cedula':cedula})
+        existing_usuari = registrar.find_one({'usuario':usuari})
+
+        if existing_cedula :
+            flash("Ya existe un usuario con esa cedula")
+            return redirect(url_for('login'))
+        elif existing_usuari:
+            flash("Ya existe ese nombre de usuario ")
+            return redirect(url_for('login'))
+        else:
             registr= Usuario(cedula,usuari,roles,email,contra)
             registrar.insert_one(registr.UserDBCollection())
+            flash("Guardado a la base de datos ")
             return redirect(url_for ('login'))
-        else:
-            return "No se encontro la pagina"
     else:
         return render_template('admin/in_mecanicos.html')
 
@@ -87,9 +95,20 @@ def client():
         nombre= request.form["nombre"]
         cedula= request.form["cedula"]
         direccion=request.form["direccion"]
-        if nombre and cedula and direccion:
+        
+        existing_nombre = clientes.find_one({'nombre':nombre})
+        existing_cedula = clientes.find_one({'cedula':cedula})
+
+        if existing_nombre:
+            flash("Ya existe un cliente con esa cedula")
+            return redirect(url_for('client'))
+        elif existing_cedula:
+            flash("Ya existe un cliente con esa cedula")
+            return redirect(url_for('client'))
+        else:
             regcli= Clientes(nombre,cedula,direccion)
             clientes.insert_one(regcli.ClientDBCollection())
+            flash("Guardado a la base datos")
             return redirect(url_for("client"))
     else:
         return render_template("admin/clientes.html")
@@ -113,6 +132,7 @@ def producto():
         if codigo and marca and categoria and cantidad and precio:
             regpro= Productos(codigo,marca,categoria,cantidad,precio)
             producto.insert_one(regpro.ProduDBCollection())
+            flash("Guardado en la base de datos")
             return redirect(url_for('producto'))
     else:
         return render_template("admin/producto.html")
@@ -137,6 +157,7 @@ def ventas():
             if usuario and cliente and marca and categoria and precio and cambio and fecha:
                 regvent = Ventas(usuario ,cliente,marca,categoria, precio,cambio,fecha)
                 venta.insert_one(regvent.VentaDBCollection())
+                flash("Guardado en la base de datos")
                 return redirect(url_for('ventas'))
     else:
         return render_template("admin/ventas.html", usuarios=adsu(), clientes=adcli(), productos=adma(),categorias=adcat())
@@ -412,7 +433,7 @@ def repodia():
 #Admin Vista de Reportes semanales
 @app.route('/admin/rep_semanal')
 def reposemana(): 
-     # Verifica si el usuario está en la sesión
+    # Verifica si el usuario está en la sesión
     if 'username' not in session:
         flash("Inicia sesion con tu usuario y contraseña")
         return redirect(url_for('index'))
@@ -467,10 +488,20 @@ def useclient():
         cedula= request.form["cedula"]
         direccion=request.form["direccion"]
     
-        if nombre and cedula and direccion:
+        existing_nombre = clientes.find_one({'nombre':nombre})
+        existing_cedula = clientes.find_one({'cedula':cedula})
+
+        if existing_nombre:
+            flash("Ya existe un cliente con ese nombre")
+            return redirect(url_for('userclient'))
+        elif existing_cedula:
+            flash("Ya existe un cliente con esa cedula")
+            return redirect(url_for('userclient'))
+        else:
             regcli= Clientes(nombre,cedula,direccion)
             clientes.insert_one(regcli.ClientDBCollection())
-            return redirect(url_for("useclient"))
+            flash("Guardado a la base datos")
+            return redirect(url_for("userclient"))
     else:
         return render_template('usuarios/clientes.html')
 
@@ -524,6 +555,7 @@ def useventa():
             if usuario and cliente and marca and categoria and precio and cambio and fecha:
                 regven= Ventas(usuario,cliente,marca,categoria,precio,cambio,fecha)
                 ventas.insert_one(regven.VentaDBCollection())
+                flash("Guardado en la base de datos")
                 return redirect(url_for('useventa'))
             
     else:

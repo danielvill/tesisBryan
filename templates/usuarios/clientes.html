@@ -15,6 +15,13 @@
         </fieldset>
         <button type="submit" class="btn btn-primary"> Enviar</button>
     </form>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <div class="alert alert-danger" role="alert">
+        {{ messages[0] }}
+    </div>
+    {% endif %}
+    {% endwith %}
 </div>
 <script src="/static/js/validaruser/user_ingresar.js"></script>
 {% endblock %}

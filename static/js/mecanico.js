@@ -21,7 +21,11 @@ function validarCedula(cedula) {
 document.querySelector('form').addEventListener('submit', function (e) {
     var cedula = document.querySelector('input[name="cedula"]').value;
     if (!validarCedula(cedula)) {
-        alert('La cédula ingresada no es válida');
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'La cedula no es valida'
+        });
         e.preventDefault(); // Previene el envío del formulario
     }
 });
@@ -40,10 +44,12 @@ document.querySelector('form').onsubmit = function (e) {
 
     if (!todosLlenos) {
         e.preventDefault(); // Previene el envío del formulario
-        alert('Los campos estan vacios');
-    } else {
-        alert('Guardado exitosamente');
-    }
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Campos estan vacios'
+        });
+    } 
 };
 
 // Limitar cedula
@@ -59,7 +65,11 @@ function validarcorreo() {
     let correo = document.getElementById('correo').value;
     let regex = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/;
     if (!regex.test(correo)) {
-        alert('Por favor, ingresa un correo válido');
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Ingresa un correo valido'
+        });
         return false;
     }
 }

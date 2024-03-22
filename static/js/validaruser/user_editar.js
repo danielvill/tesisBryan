@@ -21,31 +21,19 @@ document.querySelectorAll('form').forEach(function(form) {
     form.addEventListener('submit', function (e) {
         var cedula = form.querySelector('input[name="cedula"]').value;
         if (!validarCedula(cedula)) {
-            alert('La cédula ingresada no es válida');
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Cedula no valida'
+            });
             e.preventDefault(); // Previene el envío del formulario
         }
     });
 });
 
-$(document).ready(function () {
-    $("#filtro").on("keyup", function () {
-        var value = $(this).val().toLowerCase();
-        $("tbody[data-nombre]").filter(function () {
-            $(this).parent().toggle($(this).data("nombre").toLowerCase().indexOf(value) > -1)
-        });
-    });
-});
 
 
 
-//  Este es oara preguntar de la edicion 
-$(document).ready(function () {
-    $(".editar").click(function (event) {
-        if (!confirm("¿Estás seguro de que quieres editar?")) {
-            event.preventDefault();
-        }
-    });
-});
 
 // Limitar cedula
 function limitarEntrada() {

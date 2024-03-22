@@ -21,7 +21,11 @@ function validarCedula(cedula) {
 document.querySelector('form').addEventListener('submit', function (e) {
     var cedula = document.querySelector('input[name="cedula"]').value;
     if (!validarCedula(cedula)) {
-        alert('La cédula ingresada no es válida');
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Cedula no valida'
+        });
         e.preventDefault(); // Previene el envío del formulario
     }
 });
@@ -40,10 +44,12 @@ document.querySelector('form').onsubmit = function (e) {
 
     if (!todosLlenos) {
         e.preventDefault(); // Previene el envío del formulario
-        alert('Los campos estan vacios');
-    } else {
-        alert('Guardado exitosamente');
-    }
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Campos estan vacios'
+        });
+    } 
 };
 
 // Limitar cedula

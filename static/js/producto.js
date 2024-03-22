@@ -12,8 +12,10 @@ document.querySelector('form').onsubmit = function (e) {
 
     if (!todosLlenos) {
         e.preventDefault(); // Previene el envío del formulario
-        alert('Los campos estan vacios');
-    } else {
-        alert('Guardado exitosamente');
-    }
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Campos estan vacios'
+        });
+    } 
 };
