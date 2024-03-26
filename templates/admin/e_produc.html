@@ -8,14 +8,9 @@
                         Codigo
                     </th>
                     <th>
-                        Marca
-                    </th>
-                    <th>
                         Categoria
                     </th>
-                    <th>
-                        Cantidad
-                    </th>
+                    
                     <th>
                         Precio
                     </th>
@@ -31,13 +26,7 @@
                         {{producto.codigo}}
                     </td>
                     <td>
-                        {{producto.marca}}
-                    </td>
-                    <td>
                         {{producto.categoria}}
-                    </td>
-                    <td>
-                        {{producto.cantidad}}
                     </td>
                     <td>
                         {{producto.precio}}
@@ -70,30 +59,10 @@
         <div class="">
             <label for="">Codigo</label>
             <input type="text" id="codigo" name="codigo" class="form-control">
-            <label for="">Marca</label>
-            <select name="marca" id="marca" class="form-control">
-                <option value=""></option>
-                <option value="Hifly">Hifly</option>
-                <option value="Onix">Onix</option>
-                <option value="Sunful">Sunful</option>
-                <option value="Terraking">Terraking</option>
-                <option value="Sin nombre">Sin nombre</option>
-            </select>
             <label for="">Categoria</label>
-            <select name="categoria" id="categoria" class="form-control">
-                <option value=""></option>
-                <option value="Llantas">Llantas</option>
-                <option value="Pernos">Pernos</option>
-                <option value="Cauchos">Cauchos</option>
-                <option value="Tubos">Tubos</option>
-                <option value="Aros">Aros</option>
-            </select>
-            <label for="">Cantidad</label>
-            <input type="number" id="cantidad" class="form-control"  name="cantidad"
-                placeholder="Cantidad">
+            <input type="text"   name="categoria" id="categoria" class="form-control">
             <label for="rol">Precio</label>
-            <input type="number" id="precio" class="form-control"  name="precio"
-                placeholder="Precio">
+            <input type="number" id="precio" class="form-control"  name="precio">
         </div>
     </form>
 </div>
@@ -114,10 +83,8 @@
             // Aquí puedes abrir el modal y llenar los campos del formulario con los datos del usuario
             // Por ejemplo:
             $('#codigo').val(data[0]);
-            $('#marca').val(data[1]);
-            $('#categoria').val(data[2]);
-            $('#cantidad').val(data[3]);
-            $('#precio').val(data[4]);
+            $('#categoria').val(data[1]);
+            $('#precio').val(data[2]);
             $('#editForm').attr('action', '/edit_prod/' + data[0]);
             $('#editModal').dialog('open');
         });

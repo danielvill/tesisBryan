@@ -5,61 +5,106 @@
         <h3>Ingresado de Ventas</h3>
         <h4>Todos los campos son obligatorios </h4>
         <fieldset>
+            <label for="">Id Ventas </label>
+            <br>
+
+            <input placeholder="ID de Venta" type="text" id="id_venta" name="id_venta" value="{{ id_venta }}"
+                tabindex="1" required>
+
+        </fieldset>
+
+        <fieldset>
             <label for="">Ingreso de Usuarios</label>
             <br>
-            <select  name="usuario" class="" > 
+            <select name="usuario" class="">
                 {% for usuario in usuarios %}
                 <option value="{{ usuario }}">{{ usuario }}</option>
                 {% endfor %}
             </select>
         </fieldset>
+
         <fieldset>
-            <label for="">Ingreso de Clientes</label>
-            <br>
-            <select name="cliente" class="" >
-                {% for cliente in clientes %}
-                <option value="{{ cliente }}">{{ cliente }}</option>
-                {% endfor %}
-            </select>
+            <label for="cedula">Cédula:</label>
+            <input type="text" id="cedula" name="cedula" onchange="getNombreCliente(this.value)">
         </fieldset>
+
         <fieldset>
-            <label for="">Ingresa de Productos </label>
-            <br>
-            <select name="marca" class="form-control form-control-lg">
-                {% for producto in productos %}
-                <option value="{{ producto }}">{{ producto }}</option>
-                {% endfor %}
-            </select>
+            <label for="cliente">Cliente:</label>
+            <input type="text" id="cliente" name="cliente" readonly>
         </fieldset>
-        <fieldset>
-            <label for="">Ingresa de Categorias</label>
-            <br>
-            <select name="categoria" class="form-control form-control-lg">
-                {% for categoria in categorias %}
+        <div >
+            <fieldset>
+                <label for="">Ingresa de Categorias</label>
+                <br>
+                <select name="categoria" id="categoria" class="form-control form-control-lg "
+                    onchange="getPrecioProducto(this.value.split(',')[0])">
+                    {% for categoria, precio in categorias %}
                     <option value="{{ categoria }}">{{ categoria }}</option>
-                {% endfor %}
-            </select>
-        </fieldset>
+                    {% endfor %}
+                </select>
+            </fieldset>
+            <fieldset>
+                <input placeholder="Mano de Obra" type="text" id="precio" name="precio" tabindex="4" required>
+            </fieldset>
+            <fieldset>
+                <input placeholder="Cantidad" type="number" id="cantidad" name="cantidad" tabindex="5" required>
+            </fieldset>
+        </div>
+        <br>
+        <br>
         <fieldset>
-            <input placeholder="Ingreso de Precio" type="number" id="number" name="precio" tabindex="4" required>
-        </fieldset>
-        <fieldset>
-            <input placeholder="Ingreso de Mano de Obra" type="number" id="number" name="cambio" tabindex="4" required>
+            <input placeholder="Total" type="number" id="cambio" name="cambio" tabindex="4" required>
         </fieldset>
         <fieldset>
             <input placeholder="Ingreso de Fecha" type="date" id="fecha" name="fecha" tabindex="4" required>
         </fieldset>
         <fieldset>
-            <button  type="submit" id="contact-submit" >Enviar</button>
+            <button type="submit" id="contact-submit">Enviar</button>
         </fieldset>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <div class="alert alert-danger" role="alert">
+            {{ messages[0] }}
+        </div>
+        {% endif %}
+        {% endwith %}
     </form>
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-    <div class="alert alert-danger" role="alert">
-        {{ messages[0] }}
-    </div>
-    {% endif %}
-    {% endwith %}
+
 </div>
+<script>
+
+
+    function getNombreCliente(cedula) {
+        fetch('/get_cliente_nombre?cedula=' + cedula)
+            .then(response => response.text())
+            .then(nombre => {
+                document.getElementById('cliente').value = nombre;
+            });
+    }
+
+    function getPrecioProducto(categoria) {
+        fetch('/get_producto_precio?categoria=' + categoria)
+            .then(response => response.text())
+            .then(precio => {
+                document.getElementById('precio').value = precio;
+            });
+    }
+    window.onload = function () {
+        var precio = document.getElementById('precio');
+        var cantidad = document.getElementById('cantidad');
+        var cambio = document.getElementById('cambio');
+
+        function calcularTotal() {
+            var total = parseFloat(precio.value) * parseFloat(cantidad.value);
+            if (!isNaN(total)) {
+                cambio.value = total;
+            }
+        }
+
+        precio.addEventListener('input', calcularTotal);
+        cantidad.addEventListener('input', calcularTotal);
+    };
+
+</script>
 <script src="/static/js/validaradmin/ventas.js"></script>
 {% endblock %}

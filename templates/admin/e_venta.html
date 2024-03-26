@@ -5,22 +5,28 @@
             <thead>
                 <tr>
                     <th>
+                        Id Venta
+                    </th>
+                    <th>
                         Usuario
                     </th>
                     <th>
                         Cliente
                     </th>
                     <th>
-                        Marca
+                        Cedula
                     </th>
                     <th>
                         Categoria
                     </th>
                     <th>
-                        Precio por unidad de la pieza
+                        Precio
                     </th>
                     <th>
-                        Precio de Mano de obra
+                        Cantidades
+                    </th>
+                    <th>
+                        Total
                     </th>
                     <th>
                         Fecha
@@ -34,19 +40,25 @@
                 {% for e_venta in ventas %}
                 <tr>
                     <td>
+                        {{e_venta.id_venta}}
+                    </td>
+                    <td>
                         {{e_venta.usuario}}
                     </td>
                     <td>
                         {{e_venta.cliente}}
                     </td>
                     <td>
-                            {{e_venta.marca}}
+                        {{e_venta.cedula}}
                     </td>
                     <td>
                         {{e_venta.categoria}}
                     </td>
                     <td>
                         {{e_venta.precio}}
+                    </td>
+                    <td>
+                        {{e_venta.cantidad}}
                     </td>
                     <td>
                         {{e_venta.cambio}}
@@ -81,29 +93,21 @@
 <div id="editModal" title="Editar Ventas">
     <form id="editForm" action="" method="post">
         <div class="">
+            <label for="">Id Venta</label>
+            <input type="number" class="form-control" id="id_venta" name="id_venta">
             <label for="">Usuario</label>
             <input type="text" class="form-control" id="usuario" name="usuario">
             <label for="">Cliente</label>
             <input type="text" class="form-control" id="cliente" name="cliente">
-            <label for="">Marca</label>
-            <select name="marca" id="marca" class="form-control">
-                <option value="Hifly">Hifly</option>
-                <option value="Onix">Onix</option>
-                <option value="Sunful">Sunful</option>
-                <option value="Terraking">Terraking</option>
-                <option value="Sin nombre">Sin nombre</option>
-            </select>
+            <label for="">Cedula</label>
+            <input type="text" class="form-control" id="cedula" name="cedula">
             <label for="">Categoria</label>
-            <select name="categoria" id="categoria" class="form-control">
-                <option value="Llantas">Llantas</option>
-                <option value="Pernos">Pernos</option>
-                <option value="Cauchos">Cauchos</option>
-                <option value="Tubos">Tubos</option>
-                <option value="Aros">Aros</option>
-            </select>
+            <input type="text" name="categoria" id="categoria" class="form-control">
             <label for="">Precio</label>
             <input type="number"  class="form-control"  id="precio" name="precio">
-            <label for="">Cambio</label>
+            <label for="">Cantidades</label>
+            <input type="number"  class="form-control"  id="cantidad" name="cantidad">
+            <label for="">Total</label>
             <input type="number"  class="form-control"  id="cambio" name="cambio">
             <label for="">Fecha</label>
             <input type="date" class="form-control"  id="fecha" name="fecha">
@@ -126,13 +130,15 @@
             var data = table.row(row).data();
             // Aquí puedes abrir el modal y llenar los campos del formulario con los datos del usuario
             // Por ejemplo:
-            $('#usuario').val(data[0]);
-            $('#cliente').val(data[1]);
-            $('#marca').val(data[2]);
-            $('#categoria').val(data[3]);
-            $('#precio').val(data[4]);
-            $('#cambio').val(data[5]);
-            $('#fecha').val(data[6]);
+            $('#id_venta').val(data[0]);
+            $('#usuario').val(data[1]);
+            $('#cliente').val(data[2]);
+            $('#cedula').val(data[3]);
+            $('#categoria').val(data[4]);
+            $('#precio').val(data[5]);
+            $('#cantidad').val(data[6]);
+            $('#cambio').val(data[7]);
+            $('#fecha').val(data[8]);
             $('#editForm').attr('action', '/edit_venta/' + data[0]);
             $('#editModal').dialog('open');
         });

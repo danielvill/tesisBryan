@@ -5,44 +5,50 @@
         <h3>Ingresado de Productos</h3>
         <h4>Todos los campos son obligatorios </h4>
         <fieldset>
-            <input placeholder="Ingresar codigo" type="number" name="codigo" id="miInput"   tabindex="1" required autofocus>
+            <input placeholder="Ingresar codigo" type="number" name="codigo"  tabindex="1" required
+                autofocus>
         </fieldset>
-        <fieldset>
-            <select name="marca" id="select" class="form-control" tabindex="2">
-                <option value="Hifly">Hifly</option>
-                <option value="Onix">Onix</option>
-                <option value="Sunful">Sunful</option>
-                <option value="Terraking">Terraking</option>
-                <option value="Sin nombre">Sin nombre</option>
-            </select>
-        </fieldset>
-        <fieldset>
-            <select name="categoria" id="" class="form-control">
+        
+        <fieldset id="field">
+            <select name="categoria" id="categoria" class="form-control">
                 <option value="Llantas">Llantas</option>
                 <option value="Pernos">Pernos</option>
                 <option value="Cauchos">Cauchos</option>
                 <option value="Tubos">Tubos</option>
                 <option value="Aros">Aros</option>
             </select>
+            <button  type="button" id="cambiar" class="small btn-primary">Agregar Producto </button>
+        </fieldset>
+
+        <fieldset>
+            <input placeholder="Valor de Mano de Obra" type="number" id="number" name="precio" tabindex="4" required>
         </fieldset>
         <fieldset>
-            <input  type="number" placeholder="Ingreso de cantidad"  name="cantidad" tabindex="3" required  >
+            <button type="submit" id="contact-submit">Enviar</button>
         </fieldset>
-        <fieldset>
-            <input placeholder="Ingreso de Precio" type="number" id="number" name="precio" tabindex="4" required>
-        </fieldset>
-        <fieldset>
-            <button  type="submit" id="contact-submit" >Enviar</button>
-        </fieldset>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <div class="alert alert-danger" role="alert">
+            {{ messages[0] }}
+        </div>
+        {% endif %}
+        {% endwith %}
     </form>
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-    <div class="alert alert-danger" role="alert">
-        {{ messages[0] }}
-    </div>
-    {% endif %}
-    {% endwith %}
+
 </div>
+<script>
+     document.getElementById('cambiar').addEventListener('click', function() {
+        var field = document.getElementById('field');
+        var input = document.createElement('input');
+        input.type = 'text';
+        input.name = 'categoria';
+        input.className = 'form-control';
+        field.replaceChild(input, document.getElementById('categoria'));
+        this.style.display = 'none';
+    });
+
+</script>
+
 <script src="/static/js/producto.js">
 </script>
 {% endblock %}

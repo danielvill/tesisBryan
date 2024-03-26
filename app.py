@@ -1,4 +1,5 @@
 from flask import flash, Flask,session, render_template, request,Response ,jsonify, redirect, url_for
+from pymongo import ReturnDocument
 from controllers.bdatos import Conexion as dbase
 from modules.clientes import Clientes
 from modules.admin import Admin
@@ -13,7 +14,6 @@ db = dbase()
 
 app = Flask(__name__)
 app.secret_key = 'mecanicajulio'
-
 
 @app.route('/logout')
 def logout():
@@ -83,7 +83,7 @@ def login():
     else:
         return render_template('admin/in_mecanicos.html')
 
-#Administrador modulo de ingresado de clientes
+# *Administrador modulo de ingresado de clientes
 @app.route('/admin/clientes',methods=['GET','POST'])
 def client():
     # Verifica si el usuario está en la sesión
@@ -114,28 +114,50 @@ def client():
         return render_template("admin/clientes.html")
         
 
-#Ingresado de Productos
+# * Ingresado de Productos
 @app.route('/admin/producto',methods=['GET','POST'])
 def producto():
     # Verifica si el usuario está en la sesión
     if 'username' not in session:
         flash("Inicia sesion con tu usuario y contraseña")
         return redirect(url_for('index'))
+    
+    # Define codigo fuera del bloque if/else
+    codigo = None
+
     if request.method == 'POST':      
         producto =db['productos']
-        codigo=request.form["codigo"]
-        marca=request.form["marca"]
+        codigo_counter = db['codigo_counter']
+        
+        # Obtén el último valor del contador y actualízalo
+        counter = codigo_counter.find_one_and_update(
+            {'_id': 'producto_id'},
+            {'$inc': {'value': 1}},
+            return_document=ReturnDocument.AFTER
+        )
+        codigo = counter['value']
+        
         categoria=request.form["categoria"]
-        cantidad=request.form["cantidad"]
         precio=request.form["precio"]
-    
-        if codigo and marca and categoria and cantidad and precio:
-            regpro= Productos(codigo,marca,categoria,cantidad,precio)
+        
+        # Validacion si existe esa categoria
+        existing_categoria = producto.find_one({"categoria": categoria}) 
+        
+        if existing_categoria:
+            flash("Ya existe esa categoria")
+            return redirect(url_for('producto'))
+
+        if categoria  and precio:
+            regpro= Productos(codigo,categoria,precio)
             producto.insert_one(regpro.ProduDBCollection())
             flash("Guardado en la base de datos")
             return redirect(url_for('producto'))
     else:
+        # Pasa el código a la plantilla
         return render_template("admin/producto.html")
+
+
+
 
 # Ingresado de Ventas
 @app.route('/admin/ventas',methods=['GET','POST'])
@@ -145,22 +167,61 @@ def ventas():
         flash("Inicia sesion con tu usuario y contraseña")
         return redirect(url_for('index'))
     if request.method == 'POST':
-            venta =db['ventas']
-            usuario=request.form["usuario"]
-            cliente=request.form["cliente"]
-            marca=request.form["marca"]
-            categoria=request.form["categoria"]
-            precio=request.form["precio"]
-            cambio=request.form["cambio"]
-            fecha=request.form["fecha"]
-        
-            if usuario and cliente and marca and categoria and precio and cambio and fecha:
-                regvent = Ventas(usuario ,cliente,marca,categoria, precio,cambio,fecha)
-                venta.insert_one(regvent.VentaDBCollection())
-                flash("Guardado en la base de datos")
-                return redirect(url_for('ventas'))
+        venta = db['ventas']
+        codigo_counter = db['codigo_counter']
+        # Obtén el último valor del contador y actualízalo
+        counter = codigo_counter.find_one_and_update(
+            {'_id': 'ventaID'},
+            {'$inc': {'value': 1}},
+            return_document=ReturnDocument.AFTER
+        )
+        id_venta = counter['value']
+        usuario = request.form["usuario"]
+        cliente = request.form["cliente"]
+        cedula = request.form["cedula"]
+        categorias = request.form["categoria"]
+        precios = request.form["precio"]
+        cantidades = request.form["cantidad"]
+        cambio = request.form["cambio"]
+        fecha = request.form["fecha"]
+    
+        if id_venta and usuario and cliente and cedula and categorias and precios and cantidades and cambio and fecha:
+            regvent = Ventas(id_venta,usuario ,cliente,cedula,categorias, precios,cantidades,cambio,fecha)
+            venta.insert_one(regvent.VentaDBCollection())
+            flash("Guardado en la base de datos")
+            return redirect(url_for('ventas'))
     else:
-        return render_template("admin/ventas.html", usuarios=adsu(), clientes=adcli(), productos=adma(),categorias=adcat())
+        
+        return render_template("admin/ventas.html", usuarios=adsu(), clientes=adcli(),categorias=adcat())
+
+#Para obtener un Id en ventas 
+def get_next_sequence_value(sequence_name):
+    document = db['counters'].find_one_and_update(
+        {'_id': sequence_name }, 
+        {'$inc': {'sequence_value': 1}},
+        return_document=ReturnDocument.AFTER
+    )
+    return document['sequence_value']
+
+# Para buscar al cliente con la cedula 
+@app.route('/get_cliente_nombre', methods=['GET'])
+def get_cliente_nombre():
+    cedula = request.args.get('cedula')
+    cliente = db.clientes.find_one({"cedula": cedula}, {"nombre": 1})
+    if cliente:
+        return cliente['nombre']
+    else:
+        return "Cliente no encontrado"
+    
+@app.route('/get_producto_precio', methods=['GET'])
+def get_producto_precio():
+    categoria = request.args.get('categoria')
+    producto = db.productos.find_one({"categoria": categoria}, {"precio": 1})
+    if producto:
+        return str(producto['precio'])
+    else:
+        return "Producto no encontrado"
+
 
 #Vista de clientes
 @app.route('/admin/e_client')
@@ -197,42 +258,72 @@ def editarproducto():
     return render_template('admin/e_produc.html', productos=producto)
 
 # Elimnado de Productos
-@app.route('/delete_prod/<string:prod_codigo>')
+@app.route('/delete_prod/<int:prod_codigo>')
 def eliproduc(prod_codigo):
     producto =db['productos']
     producto.delete_one({'codigo':prod_codigo})
     return redirect(url_for('editarproducto'))        
 
 # Editado de Productos
-@app.route('/edit_prod/<string:prod_codigo>', methods=['GET', 'POST'] )
+@app.route('/edit_prod/<int:prod_codigo>', methods=['GET', 'POST'] )
 def edproduc(prod_codigo):
     producto =db['productos']
     codigo= request.form["codigo"]
-    marca=request.form["marca"]
     categoria=request.form["categoria"]
-    cantidad=request.form["cantidad"]
     precio=request.form["precio"]
     
-    if codigo and marca and categoria and cantidad and precio:
-        producto.update_one({'codigo':prod_codigo},{'$set':{'codigo':codigo,'marca':marca,'categoria':categoria,'cantidad':cantidad,'precio':precio}})
+    if codigo  and categoria  and precio:
+        producto.update_one({'codigo':prod_codigo},{'$set':{'codigo':codigo,'categoria':categoria,'precio':precio}})
         return redirect(url_for('editarproducto'))
+
+#* Reporte de Productos 
+
+@app.route('/admin/r_productos')
+def r_productos():
+    # Obtener todas las ventas de la colección 'ventas'
+    ventas = db.ventas.find()
+
+    # Crear un diccionario para almacenar las ventas por usuario
+    ventas_por_usuario = {}
+
+    # Iterar sobre las ventas y sumar las cantidades por usuario
+    for venta in ventas:
+        usuario = venta['categoria']
+        cantidad = int(venta['cantidad'])
+        fecha = venta ["fecha"]  
+
+        # Convertir la fecha a formato español
+        fecha = datetime.strptime(fecha, "%Y-%m-%d")
+        fecha_es = format_date(fecha, 'MMMM yyyy', locale='es_ES')
+
+        # Verificar si el usuario ya está en el diccionario
+        if usuario in ventas_por_usuario:
+            ventas_por_usuario[usuario]['ventas'] += cantidad
+            ventas_por_usuario[usuario]['fecha'] = fecha_es
+        else:
+            ventas_por_usuario[usuario] = {'ventas': cantidad, 'fecha': fecha_es}
+
+    # Ordenar los usuarios por la cantidad de ventas en orden descendente
+    usuarios_ordenados = sorted(ventas_por_usuario.items(), key=lambda x: x[1]['ventas'], reverse=True)
+
+    
+    return render_template('admin/r_productos.html', usuarios_ordenados=usuarios_ordenados)
         
+
+
 # Select Para las ventas agregar en el html
 def adsu():
     usuarios = db.usuarios.find({}, {"usuario": 1})
     return [usuario['usuario'] for usuario in usuarios]
 
 def adcli():
-    clientes = db.clientes.find({}, {"nombre": 1})
-    return [cliente['nombre'] for cliente in clientes]
+    clientes = db.clientes.find({}, {"nombre": 1, "cedula": 1})
+    return [(cliente['cedula'], cliente['nombre']) for cliente in clientes]
 
-def adma():
-    productos = db.productos.find({}, {"marca": 1})
-    return [producto['marca'] for producto in productos]
 
 def adcat():
-    productos = db.productos.find({}, {"categoria": 1})
-    return [producto['categoria'] for producto in productos]
+    productos = db.productos.find({}, {"categoria": 1,"precio":1})
+    return [(producto['categoria'], producto['precio']) for producto in productos]
 
 
 #Fecha para mostrar en reportes
@@ -353,6 +444,11 @@ def v_ventas():
     # Renderizar la plantilla 'admin/v_ventas.html' con los datos necesarios
     return render_template('admin/v_ventas.html', usuarios_ordenados=usuarios_ordenados)
 
+
+
+
+
+
 # * Editar ventas de mecanicos 
 
 # * Vista ventas de todos los usuarios para Poder editarlos
@@ -376,16 +472,18 @@ def elive(venta_name):
 @app.route('/edit_venta/<string:venta_name>', methods=['GET', 'POST'])
 def editve(venta_name):
     venta = db['ventas']
+    id_venta =request.form['id_venta']
     usuario = request.form['usuario']
     cliente = request.form['cliente']
-    marca = request.form['marca']
+    cedula = request.form['cedula']
     categoria = request.form['categoria']
     precio = request.form['precio']
+    cantidad = request.form['cantidad']
     cambio = request.form['cambio']
     fecha = request.form['fecha']
     
-    if usuario and cliente and marca and categoria and precio and cambio and fecha:
-        venta.update_one({'usuario':venta_name},{'$set':{'usuarios':usuario,'cliente':cliente,'marca':marca,'categoria':categoria,'precio':precio,'cambio':cambio,'fecha':fecha}})
+    if id_venta and usuario and cliente and cedula and categoria and precio and cantidad and cambio and fecha:
+        venta.update_one({'id_venta':venta_name},{'$set':{'id_venta':id_venta ,'usuario':usuario,'cliente':cliente, 'cedula':cedula, 'categoria':categoria,'precio':precio, 'cantidad':cantidad, 'cambio':cambio,'fecha':fecha}})
         return redirect(url_for('e_venta'))
     else:
         return render_template("admin/e_venta.html")
@@ -547,13 +645,12 @@ def useventa():
             ventas= db['ventas']
             usuario= request.form["usuario"]
             cliente=request.form["cliente"]
-            marca=request.form["marca"]
             categoria=request.form["categoria"]
             precio=request.form["precio"]
             cambio=request.form["cambio"]
             fecha=request.form["fecha"]
-            if usuario and cliente and marca and categoria and precio and cambio and fecha:
-                regven= Ventas(usuario,cliente,marca,categoria,precio,cambio,fecha)
+            if usuario and cliente  and categoria and precio and cambio and fecha:
+                regven= Ventas(usuario,cliente,categoria,precio,cambio,fecha)
                 ventas.insert_one(regven.VentaDBCollection())
                 flash("Guardado en la base de datos")
                 return redirect(url_for('useventa'))
