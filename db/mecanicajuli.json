@@ -1,14 +1,21 @@
 {
-    "Usuarios": [
+    "admin":[
         {
-            "cedula": "045236",
-            "nombre": "Bryan",
-            "rol": "Usuario",
-            "email": "bryan@gmail.com",
-            "clave": "458"
+            "usuario":"admin",
+            "contraseña":"123"
+
         }
     ],
-    "Clientes":
+    "usuarios": [
+        {
+            "usuario":"Bryan Caracundo",
+            "cedula": "045236",
+            "rol": "Usuario",
+            "correo": "bryan@gmail.com",
+            "contraseña": "458"
+        }
+    ],
+    "clientes":
     [
         {
             
@@ -17,7 +24,7 @@
             "cedula o ruc":"0754668"
         }
     ],
-    "Productos":
+    "productos":
     [
         {
             "codigo":"9283",
@@ -27,15 +34,16 @@
             "precio":"2.50"
         }
     ],
-    "Ventas":
+    "ventas":
     [
         {
-            "usuario":"nombre",
-            "cliente":"Mercedes Quezada",
+            "usuario":"usuario",
+            "cliente":"nombre",
             "marca":"yamaha",
             "categoria":"pernos",
             "precio":"2.50",
-            "cambio":"3.50"
+            "cambio":"3.50",
+            "fecha":"2023/12/01"
         }
     ]
     

@@ -1,0 +1,77 @@
+{% extends "usuarios/layout.html" %}
+{% block content %}
+<div class="container">
+    <table id="example" class="table">
+        <thead>
+            <tr>
+                <th>
+                    Id Venta
+                </th>
+                <th>
+                    Cliente
+                </th>
+                <th>
+                    Cedula
+                </th>
+                <th>
+                    Categoria
+                </th>
+                <th>
+                    Precio
+                </th>
+                <th>
+                    Cantidades
+                </th>
+                <th>
+                    Total
+                </th>
+                <th>
+                    Fecha
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for e_venta in ventas %}
+            <tr>
+                <td>
+                    {{e_venta.id_venta}}
+                </td>
+                <td>
+                    {{e_venta.cliente}}
+                </td>
+                <td>
+                    {{e_venta.cedula}}
+                </td>
+                <td>
+                    {{e_venta.categoria}}
+                </td>
+                <td>
+                    {{e_venta.precio}}
+                </td>
+                <td>
+                    {{e_venta.cantidad}}
+                </td>
+                <td>
+                    {{e_venta.cambio}}
+                </td>
+                <td>
+                    {{e_venta.fecha}}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+   
+    //Cambio de english a spanish
+    $(document).ready(function () {
+        $('#example').DataTable({
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
+            }
+        });
+    });
+</script>
+{% endblock %}

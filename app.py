@@ -9,6 +9,8 @@ from modules.ventas import Ventas
 from datetime import datetime,timedelta
 from collections import defaultdict
 from babel.dates import format_date 
+from bson import json_util
+import json
 
 db = dbase()
 
@@ -156,9 +158,6 @@ def producto():
         # Pasa el código a la plantilla
         return render_template("admin/producto.html")
 
-
-
-
 # Ingresado de Ventas
 @app.route('/admin/ventas',methods=['GET','POST'])
 def ventas():
@@ -190,8 +189,7 @@ def ventas():
             venta.insert_one(regvent.VentaDBCollection())
             flash("Guardado en la base de datos")
             return redirect(url_for('ventas'))
-    else:
-        
+    else:   
         return render_template("admin/ventas.html", usuarios=adsu(), clientes=adcli(),categorias=adcat())
 
 #Para obtener un Id en ventas 
@@ -211,7 +209,7 @@ def get_cliente_nombre():
     if cliente:
         return cliente['nombre']
     else:
-        return "Cliente no encontrado"
+        return ""
     
 @app.route('/get_producto_precio', methods=['GET'])
 def get_producto_precio():
@@ -220,7 +218,7 @@ def get_producto_precio():
     if producto:
         return str(producto['precio'])
     else:
-        return "Producto no encontrado"
+        return ""
 
 
 #Vista de clientes
@@ -444,10 +442,27 @@ def v_ventas():
     # Renderizar la plantilla 'admin/v_ventas.html' con los datos necesarios
     return render_template('admin/v_ventas.html', usuarios_ordenados=usuarios_ordenados)
 
+@app.route('/admin/comprobante', methods=['GET'])
+def comprobante():
+    id_venta = request.args.get('id_venta')
+    venta = None
+
+    if id_venta:
+        id_venta = int(id_venta)  # Convierte id_venta a un número
+        venta = db.ventas.find_one({'id_venta': id_venta})
+
+    return render_template('admin/comprobante.html', venta=venta)
 
 
 
-
+@app.route('/get_venta_info')
+def get_venta_info():
+    id_venta = request.args.get('id', type=int)
+    venta = db.ventas.find_one({'id_venta': id_venta})
+    if venta:
+        return json.dumps(venta, default=json_util.default)
+    else:
+        return jsonify({'error': 'No se encontró la venta'})
 
 # * Editar ventas de mecanicos 
 
@@ -571,6 +586,10 @@ def reposemana():
     return render_template('admin/rep_semanal.html', usuarios_ordenados=usuarios_ordenados)
 
 
+
+
+
+
 #*---------------------- Carpetas Usuarios ----------------------------------
 
 #Ingresado de Clientes los mecanicos
@@ -631,33 +650,62 @@ def vuse_cliente():
     return render_template('usuarios/e_client.html', clientes=cliente)
 
 
-
 # * Ingreso de Usuarios ventas
-
 @app.route('/usuarios/ventas', methods=['GET', 'POST'])
 def useventa():
     # Verifica si el usuario está en la sesión
     if 'username' not in session:
         flash("Inicia sesion con tu usuario y contraseña")
         return redirect(url_for('index'))
-    if "usuarios" in session:    
-        if request.method == 'POST':
-            ventas= db['ventas']
-            usuario= request.form["usuario"]
-            cliente=request.form["cliente"]
-            categoria=request.form["categoria"]
-            precio=request.form["precio"]
-            cambio=request.form["cambio"]
-            fecha=request.form["fecha"]
-            if usuario and cliente  and categoria and precio and cambio and fecha:
-                regven= Ventas(usuario,cliente,categoria,precio,cambio,fecha)
-                ventas.insert_one(regven.VentaDBCollection())
-                flash("Guardado en la base de datos")
-                return redirect(url_for('useventa'))
+    if request.method == 'POST':
+        venta = db['ventas']
+        codigo_counter = db['codigo_counter']
+        # Obtén el último valor del contador y actualízalo
+        counter = codigo_counter.find_one_and_update(
+            {'_id': 'ventaID'},
+            {'$inc': {'value': 1}},
+            return_document=ReturnDocument.AFTER
+        )
+        id_venta = counter['value']
+        usuario = request.form["usuario"]
+        cliente = request.form["cliente"]
+        cedula = request.form["cedula"]
+        categorias = request.form["categoria"]
+        precios = request.form["precio"]
+        cantidades = request.form["cantidad"]
+        cambio = request.form["cambio"]
+        fecha = request.form["fecha"]
+    
+        if id_venta and usuario and cliente and cedula and categorias and precios and cantidades and cambio and fecha:
+            regvent = Ventas(id_venta,usuario ,cliente,cedula,categorias, precios,cantidades,cambio,fecha)
+            venta.insert_one(regvent.VentaDBCollection())
+            flash("Guardado en la base de datos")
+            return redirect(url_for('useventa'))
             
     else:
-        return render_template('usuarios/ventas.html', usuarios=adsu(), clientes=adcli(), productos=adma(),categorias=adcat() , usuario=session['usuario'])   
+        return render_template('usuarios/ventas.html', usuarios=adsu(), clientes=adcli(),categorias=adcat() , usuario=session['usuario'])   
     
+
+@app.route('/usuarios/v_venta')
+def usuv_venta():
+    if 'username' not in session:
+        flash("Inicia sesion con tu usuario y contraseña")
+        return redirect(url_for('index'))
+    
+    venta =db.ventas.find()
+    return render_template('/usuarios/v_venta.html',ventas=venta)
+
+
+@app.route('/usuarios/comprobante', methods=['GET'])
+def usucomprobante():
+    id_venta = request.args.get('id_venta')
+    venta = None
+
+    if id_venta:
+        id_venta = int(id_venta)  # Convierte id_venta a un número
+        venta = db.ventas.find_one({'id_venta': id_venta})
+
+    return render_template('usuarios/comprobante.html', venta=venta)
 
 #Carpeta vista de productos
 @app.route('/usuarios/e_produc')

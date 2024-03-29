@@ -1,0 +1,75 @@
+{% extends "usuarios/layout.html" %}
+{% block content %}
+<style type="text/css" media="print">
+    input[name="id_venta"], .btn-primary, label[for=""] {
+        display: none;
+    }
+</style>
+<div class="container mt-5">
+    <form>
+        <h1 style="border: 3px solid gray; border-radius: 50%; padding: 20px; width: fit-content;">Mecánica Don Julio</h1>
+        <div>
+            <label for="">Agregado de Id</label>
+            <br>
+            <input type="number"  name="id_venta" class="form-control">
+        </div>
+        <div>
+            <label for="nombre">Nombre</label>
+            <input type="text" class="form-control" name="nombre" value="{{ venta.cliente if venta else '' }}">
+        </div>
+        <div>
+            <label for="cedula">Cédula</label>
+            <input type="text" class="form-control" name="cedula" value="{{ venta.cedula if venta else '' }}">
+        </div>
+        <div >
+            <label for="fecha">Fecha</label>
+            <input type="date" class="form-control" id="direccion" >
+        </div>
+        <div>
+    <label for="productos">Productos</label>
+    <table class="table" id="productos">
+        <thead>
+            <tr>
+                <th scope="col">Producto</th>
+                <th scope="col">Cantidad</th>
+                <th scope="col">Precio</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ venta.categoria }}</td>
+                <td>{{ venta.cantidad }}</td>
+                <td >{{ venta.precio }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+        <div>
+            <label for="total">Total</label>
+            <input type="text" class="form-control" name="cambio" value="{{ venta.cambio if venta else '' }}" >
+        </div>
+        <br>
+        <button type="submit" class="btn btn-primary" hidden >Imprimir</button>
+    </form>
+</div>
+<script>
+
+$.get('/get_venta_info', {id: id_venta}, function(data){
+  if (data) {
+    $('input[name="nombre"]').val(data.cliente);
+    $('input[name="cedula"]').val(data.cedula);
+    
+    // Actualizar los valores de los inputs de la tabla de productos
+    $('input[name="categoria"]').val(data.categoria);
+    $('input[name="cantidad"]').val(data.cantidad);
+    $('input[name="precio"]').val(data.precio);
+    
+    // Llenar el campo total
+    $('input[name="cambio"]').val(data.cambio);
+  }
+});
+
+</script>
+
+
+{% endblock %}
