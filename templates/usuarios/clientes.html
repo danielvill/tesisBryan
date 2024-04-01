@@ -5,23 +5,25 @@
         <h3>Ingresar Clientes</h3>
         <h4>Todos los campos son obligatorios </h4>
         <fieldset>
-            <input placeholder="Ingresar nombre" type="text" id="miInput"  name="nombre" tabindex="1" required autofocus>
+            <input placeholder="Ingresar nombre" type="text" id="miInput" name="nombre" tabindex="1" required autofocus>
         </fieldset>
         <fieldset>
-            <input placeholder="Ingresar direccion" type="text" id="miInput"  name="direccion" tabindex="1" required autofocus>
+            <input placeholder="Ingresar direccion" type="text" id="miInput" name="direccion" tabindex="1" required
+                autofocus>
         </fieldset>
         <fieldset>
-            <input placeholder="Ingresar numero de cedula" type="text" oninput="limitarEntrada()" id="miInput"  name="cedula" tabindex="1" required autofocus>
+            <input placeholder="Ingresar numero de cedula" type="number" oninput="limitarEntrada()" id="miInput"
+                name="cedula" tabindex="1" required autofocus>
         </fieldset>
         <button type="submit" class="btn btn-primary"> Enviar</button>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <div class="alert alert-danger" role="alert">
+            {{ messages[0] }}
+        </div>
+        {% endif %}
+        {% endwith %}
     </form>
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-    <div class="alert alert-danger" role="alert">
-        {{ messages[0] }}
-    </div>
-    {% endif %}
-    {% endwith %}
 </div>
 <script src="/static/js/validaruser/user_ingresar.js"></script>
 {% endblock %}

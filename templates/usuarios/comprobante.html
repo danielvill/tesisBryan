@@ -53,23 +53,17 @@
     </form>
 </div>
 <script>
-
 $.get('/get_venta_info', {id: id_venta}, function(data){
   if (data) {
     $('input[name="nombre"]').val(data.cliente);
     $('input[name="cedula"]').val(data.cedula);
-    
     // Actualizar los valores de los inputs de la tabla de productos
     $('input[name="categoria"]').val(data.categoria);
     $('input[name="cantidad"]').val(data.cantidad);
     $('input[name="precio"]').val(data.precio);
-    
     // Llenar el campo total
     $('input[name="cambio"]').val(data.cambio);
   }
 });
-
 </script>
-
-
 {% endblock %}

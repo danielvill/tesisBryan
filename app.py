@@ -610,15 +610,15 @@ def useclient():
 
         if existing_nombre:
             flash("Ya existe un cliente con ese nombre")
-            return redirect(url_for('userclient'))
+            return redirect(url_for('useclient'))
         elif existing_cedula:
             flash("Ya existe un cliente con esa cedula")
-            return redirect(url_for('userclient'))
+            return redirect(url_for('useclient'))
         else:
             regcli= Clientes(nombre,cedula,direccion)
             clientes.insert_one(regcli.ClientDBCollection())
             flash("Guardado a la base datos")
-            return redirect(url_for("userclient"))
+            return redirect(url_for("useclient"))
     else:
         return render_template('usuarios/clientes.html')
 

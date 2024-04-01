@@ -15,7 +15,6 @@
 {% for vuse_producto in productos %}
 <form action="/useedit_prod/{{vuse_producto.codigo}}" method="POST">
     <br>
-    
         <table class="table">
             <thead>
                 <tr>
@@ -71,7 +70,6 @@
 </form>
 {% endfor %}
 </div>
-
 <script>
     $(document).ready(function () {
         $("#filtro").on("keyup", function () {

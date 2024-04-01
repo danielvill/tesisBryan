@@ -7,10 +7,8 @@
         <fieldset>
             <label for="">Id Ventas </label>
             <br>
-
             <input placeholder="ID de Venta" type="text" id="id_venta" name="id_venta" value="{{ id_venta }}"
                 tabindex="1" required>
-
         </fieldset>
         <fieldset>
             <label for="">Ingreso de Usuarios</label>
@@ -64,18 +62,8 @@
         {% endif %}
         {% endwith %}
     </form>
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-    <div class="alert alert-danger" role="alert">
-        {{ messages[0] }}
-    </div>
-    {% endif %}
-    {% endwith %}
 </div>
-
 <script>
-
-
     function getNombreCliente(cedula) {
         fetch('/get_cliente_nombre?cedula=' + cedula)
             .then(response => response.text())
