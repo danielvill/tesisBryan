@@ -9,28 +9,28 @@
     <form>
         <h1 style="border: 3px solid gray; border-radius: 50%; padding: 20px; width: fit-content;">Mecánica Don Julio</h1>
         <div>
-            <label for="">Agregado de Id</label>
+            <label for="">Agrega el ID del servicio</label>
             <br>
             <input type="number"  name="id_venta" class="form-control">
         </div>
         <div>
-            <label for="nombre">Nombre</label>
+            <label for="nombre">Nombre del cliente</label>
             <input type="text" class="form-control" name="nombre" value="{{ venta.cliente if venta else '' }}">
         </div>
         <div>
-            <label for="cedula">Cédula</label>
+            <label for="cedula">Cédula del cliente</label>
             <input type="text" class="form-control" name="cedula" value="{{ venta.cedula if venta else '' }}">
         </div>
         <div >
-            <label for="fecha">Fecha</label>
-            <input type="date" class="form-control" id="direccion" >
+            <label for="fecha">Fecha que realizo el servicio</label>
+            <input type="text" class="form-control " name="fecha" value="{{ venta.fecha if venta else '' }}" >
         </div>
         <div>
-    <label for="productos">Productos</label>
+    <label for="productos">Servicios</label>
     <table class="table" id="productos">
         <thead>
             <tr>
-                <th scope="col">Producto</th>
+                <th scope="col">Servicio</th>
                 <th scope="col">Cantidad</th>
                 <th scope="col">Precio</th>
             </tr>
@@ -49,7 +49,7 @@
             <input type="text" class="form-control" name="cambio" value="{{ venta.cambio if venta else '' }}" >
         </div>
         <br>
-        <button type="submit" class="btn btn-primary" hidden >Imprimir</button>
+        <button type="submit" class="btn btn-primary"  hidden >Imprimir</button>
     </form>
 </div>
 <script>
@@ -63,6 +63,8 @@ $.get('/get_venta_info', {id: id_venta}, function(data){
     $('input[name="categoria"]').val(data.categoria);
     $('input[name="cantidad"]').val(data.cantidad);
     $('input[name="precio"]').val(data.precio);
+
+    $('input[name="fecha"]').val(data.fecha);
     
     // Llenar el campo total
     $('input[name="cambio"]').val(data.cambio);

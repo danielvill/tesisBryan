@@ -4,12 +4,9 @@ class Clientes:
         self.cedula = cedula
         self.direccion = direccion
         
-
     def ClientDBCollection(self):
         return{
             'nombre': self.nombre,
             'cedula':self.cedula,
             'direccion':self.direccion,
-            
-            
         }

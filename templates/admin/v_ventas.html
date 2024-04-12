@@ -1,99 +1,175 @@
 {% extends "admin/layout.html" %}
 {% block content %}
-<div class="container">
-    <table id="example" class="display" style="width:100%">
-        <thead>
-            <tr>
-                <th>Mecánico</th>
-                <th>Ventas</th>
-                <th>Fecha</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for usuario, datos in usuarios_ordenados %}
-            <tr>
-                <td>{{ usuario }}</td>
-                <td>{{ datos['ventas'] }}</td>
-                <td>{{ datos['fecha'] }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
-<div class="container">
-    <canvas id="myChart"></canvas>
-</div>
-<script>
-    // Primero, seleccionamos la tabla y extraemos los datos
-    var tabla = document.getElementById('example');
-    var filas = Array.from(tabla.getElementsByTagName('tr'));
+<style>
+  #print-header {
+    display: none;
+  }
 
-    // Eliminamos la primera fila (encabezados)
-    filas.shift();
+  @media print {
+    body * {
+      visibility: hidden;
+    }
 
-    // Extraemos los datos
-    var datos = filas.map(function (fila) {
-        var celdas = fila.getElementsByTagName('td');
-        return {
-            usuario: celdas[0].textContent,
-            ventas: Number(celdas[1].textContent),
-            fecha: celdas[2].textContent
-        };
-    });
+    #print-header,
+    #print-header * {
+      visibility: visible;
+    }
 
-    // Extraemos las ventas y las fechas
-    var usuarios = datos.map(function (d) { return d.usuario; });
-    var ventas = datos.map(function (d) { return d.ventas; });
-    var fechas = datos.map(function (d) { return d.fecha; });
-
-    // Creamos el gráfico
-var ctx = document.getElementById('myChart').getContext('2d');
-var chart = new Chart(ctx, {
-  type: 'bar', // Change the chart type to 'bar'
-  data: {
-    labels: fechas,
-    datasets: [{
-      label: 'Ventas',
-      data: ventas,
-      backgroundColor: [
-        'rgba(255, 99, 132, 0.2)', // Customize bar colors here
-        'rgba(54, 162, 235, 0.2)',
-        'rgba(255, 206, 86, 0.2)',
-        'rgba(75, 192, 192, 0.2)',
-        'rgba(153, 102, 255, 0.2)',
-        'rgba(255, 159, 64, 0.2)'
-      ],
-      hoverBackgroundColor: [
-        'rgba(255, 99, 132, 1)', // Customize hover colors here
-        'rgba(54, 162, 235, 1)',
-        'rgba(255, 206, 86, 1)',
-        'rgba(75, 192, 192, 1)',
-        'rgba(153, 102, 255, 1)',
-        'rgba(255, 159, 64, 1)'
-      ],
-      borderColor: 'rgba(75, 192, 192, 1)', // Border color for bars
-      borderWidth: 1 // Border width for bars
-    }]
-  },
-  options: {
-    scales: {
-      x: {
-        beginAtZero: true // Start x-axis at 0 for better visualization
-      },
-      y: {
-        beginAtZero: true // Start y-axis at 0 for better visualization
-      }
+    #print-header {
+      position: absolute;
+      left: 0;
+      top: 0;
     }
   }
-});
+</style>
+<div class="container">
+  <div id="print-header">
+    <img src="/static/img/descarga.png" alt="" class="center"
+      style="width: 250px;height:200px; display: block; margin-left: auto; margin-right: auto; ">
+    <br>
+    <h3 id="time"></h3>
+    <h3>Mecanica Don Julio</h3>
+    <h3>Reporte de los servicios mensuales realizados</h3>
+    <h3>Santa Rosa</h3>
+    <br>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Mecánico</th>
+          <th>Ventas</th>
+          <th>Fecha</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for usuario, datos in usuarios_ordenados %}
+        <tr>
+          <td>{{ usuario }}</td>
+          <td>{{ datos['ventas'] }}</td>
+          <td>{{ datos['fecha'] }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <table id="example" class="display" style="width:100%">
+    <thead>
+      <tr>
+        <th>Mecánico</th>
+        <th>Ventas</th>
+        <th>Fecha</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for usuario, datos in usuarios_ordenados %}
+      <tr>
+        <td>{{ usuario }}</td>
+        <td>{{ datos['ventas'] }}</td>
+        <td>{{ datos['fecha'] }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+<div class="container">
+  <canvas id="myChart"></canvas>
+</div>
+<div class="container">
+  <button id="print-button" class="btn-primary" >
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-printer" viewBox="0 0 16 16">
+      <path d="M2.5 8a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1"/>
+      <path d="M5 1a2 2 0 0 0-2 2v2H2a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h1v1a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-1h1a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-1V3a2 2 0 0 0-2-2zM4 3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2H4zm1 5a2 2 0 0 0-2 2v1H2a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v-1a2 2 0 0 0-2-2zm7 2v3a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1"/>
+    </svg>
+    Imprimir 
+    </button>
+</div>
+<script>
+  // Primero, seleccionamos la tabla y extraemos los datos
+  var tabla = document.getElementById('example');
+  var filas = Array.from(tabla.getElementsByTagName('tr'));
 
-    //Cambio de english a spanish
-    $(document).ready(function () {
-        $('#example').DataTable({
-            "language": {
-                "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
-            }
-        });
+  // Eliminamos la primera fila (encabezados)
+  filas.shift();
+
+  // Extraemos los datos
+  var datos = filas.map(function (fila) {
+    var celdas = fila.getElementsByTagName('td');
+    return {
+      usuario: celdas[0].textContent,
+      ventas: Number(celdas[1].textContent),
+      fecha: celdas[2].textContent
+    };
+  });
+
+  // Extraemos las ventas y las fechas
+  var usuarios = datos.map(function (d) { return d.usuario; });
+  var ventas = datos.map(function (d) { return d.ventas; });
+  var fechas = datos.map(function (d) { return d.fecha; });
+
+  // Creamos el gráfico
+  var ctx = document.getElementById('myChart').getContext('2d');
+  var chart = new Chart(ctx, {
+    type: 'bar', // Change the chart type to 'bar'
+    data: {
+      labels: fechas,
+      datasets: [{
+        label: 'Ventas',
+        data: ventas,
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.2)', // Customize bar colors here
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(255, 206, 86, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
+          'rgba(153, 102, 255, 0.2)',
+          'rgba(255, 159, 64, 0.2)'
+        ],
+        hoverBackgroundColor: [
+          'rgba(255, 99, 132, 1)', // Customize hover colors here
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(153, 102, 255, 1)',
+          'rgba(255, 159, 64, 1)'
+        ],
+        borderColor: 'rgba(75, 192, 192, 1)', // Border color for bars
+        borderWidth: 1 // Border width for bars
+      }]
+    },
+    options: {
+      scales: {
+        x: {
+          beginAtZero: true // Start x-axis at 0 for better visualization
+        },
+        y: {
+          beginAtZero: true // Start y-axis at 0 for better visualization
+        }
+      }
+    }
+  });
+
+  //Cambio de english a spanish
+  $(document).ready(function () {
+    $('#example').DataTable({
+      "language": {
+        "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
+      }
     });
+  });
+</script>
+<script>
+  document.getElementById("print-button").onclick = function() {
+     var printContent = document.getElementById('print-header').innerHTML;
+     var originalContent = document.body.innerHTML;
+
+     document.body.innerHTML = printContent;
+     window.print();
+     document.body.innerHTML = originalContent;
+     
+ }
+ function updateTime() {
+     var date = new Date();
+     var time = date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+     document.getElementById('time').innerHTML = "Documento generado " + time;
+ }
+ setInterval(updateTime, 1000);
 </script>
 {% endblock %}

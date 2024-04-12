@@ -1,4 +1,4 @@
-from flask import flash, Flask,session, render_template, request,Response ,jsonify, redirect, url_for
+from flask import flash, Flask, send_file,session, render_template, request,Response ,jsonify, redirect, url_for
 from pymongo import ReturnDocument
 from controllers.bdatos import Conexion as dbase
 from modules.clientes import Clientes
@@ -10,6 +10,15 @@ from datetime import datetime,timedelta
 from collections import defaultdict
 from babel.dates import format_date 
 from bson import json_util
+from reportlab.pdfgen import canvas # *pip install reportlab
+from reportlab.lib.pagesizes import letter #* pip install reportlab 
+from reportlab.lib.units import inch
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
+from reportlab.platypus import SimpleDocTemplate, Table, Paragraph, TableStyle, Spacer ,Image
+from reportlab.lib import colors
+from reportlab.lib.styles import getSampleStyleSheet ,ParagraphStyle
+
 import json
 
 db = dbase()
@@ -475,6 +484,134 @@ def e_venta():
         return redirect(url_for('index'))
     venta =db.ventas.find()
     return render_template('admin/e_venta.html',ventas=venta )
+
+#* Reporte con PDF
+def generar_pdf_ventas(datos):
+    doc = SimpleDocTemplate("ventas.pdf", pagesize=letter)
+    story = []
+
+    # Define un estilo con texto centrado
+    styles = getSampleStyleSheet()
+    left_aligned_style = styles['Heading3']
+    left_aligned_style.alignment = 0  # 0 = TA_LEFT
+
+
+    
+    # Agrega la imagen
+    imagen = Image('static/img/descarga.png', width=150, height=100)
+    imagen.hAlign = 'CENTER'
+    story.append(imagen)
+    #story.append(Spacer(1, 12))
+
+    from datetime import datetime
+    fecha_hora = datetime.now().strftime("Documento generado %H:%M")
+    fecha_hora_parrafo = Paragraph(fecha_hora , left_aligned_style)
+    fecha_hora_parrafo.alignment = 1  # 2 = TA_RIGHT
+    story.append(fecha_hora_parrafo)
+    # Agrega un salto de línea
+    #story.append(Spacer(1, 12))
+    
+    # Agrega el título
+    title = Paragraph("<h3>Mecanica Don Julio </h3>", left_aligned_style)
+    story.append(title)
+
+    # Agrega un salto de línea
+    #story.append(Spacer(1, 12))
+
+    title2 = Paragraph("<h1>Reporte de ventas </h1>", left_aligned_style)
+    story.append(title2)
+
+    
+    title3 = Paragraph("<h3>Santa Rosa</h3>", left_aligned_style)
+    story.append(title3)
+    story.append(Spacer(1, 12))
+    
+    # Prepara los datos para la tabla
+    data = [[ "usuario", "precio","cantidad","cambio","fecha"]]  # Encabezados
+
+    for dato in datos:
+        row = [ dato['usuario'], dato['precio'],dato ['cantidad'],dato['cambio'],dato['fecha'] ]
+        data.append(row)
+
+    # Crea la tabla
+    table = Table(data, colWidths=[100, 100, 100, 100]) 
+
+    # Formatea la tabla
+    table.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), colors.black),
+        ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+
+        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+        ('FONTSIZE', (0, 0), (-1, 0), 14),
+
+        ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+        ('BACKGROUND', (0, 1), (-1, -1), colors.white),
+        ('GRID', (0,0), (-1,-1), 1, colors.black)
+    ]))
+
+    # Agrega la tabla al documento
+    story.append(table)
+
+    doc.build(story)
+
+@app.route('/admin/reporte/re_venta', methods=['GET'])
+def re_venta():
+    doc = SimpleDocTemplate("ventas.pdf", pagesize=letter)
+    story = []
+
+    # Define un estilo con texto centrado
+    styles = getSampleStyleSheet()
+    left_aligned_style = styles['Heading3']
+    left_aligned_style.alignment = 0  # 1 = TA_CENTER
+
+    # Agrega la imagen
+    imagen = Image('static/img/descarga.png', width=100, height=150)
+    imagen.hAlign = 'LEFT'
+    story.append(imagen)
+    story.append(Spacer(1, 12))
+
+    from datetime import datetime
+    fecha_hora = datetime.now().strftime("Documento generado %H:%M")
+    fecha_hora_parrafo = Paragraph(fecha_hora , left_aligned_style)
+    fecha_hora_parrafo.alignment = 1  # 2 = TA_RIGHT
+    story.append(fecha_hora_parrafo)
+    # Agrega un salto de línea
+    
+    
+    
+    # Agrega el título
+    title = Paragraph("<h3>Mecanica Don Julio </h3>", left_aligned_style)
+    story.append(title)
+
+    # Agrega un salto de línea
+    
+
+    title2 = Paragraph("<h1>Reporte de ventas </h1>", left_aligned_style)
+    #story.append(title2)
+
+    # Agrega otro salto de línea
+    
+
+    title3 = Paragraph("<h3>Santa Rosa</h3>", left_aligned_style)
+    story.append(title3)
+    story.append(Spacer(1, 12))
+
+    # Prepara los datos no como tabla
+    client = request.args.get('usuario', default=None, type=str)
+    
+    
+    if client is not None:
+        clie = db['ventas'].find({'usuario': client})
+    else:
+        clie = db['ventas'].find()
+    
+    generar_pdf_ventas(clie)
+    
+    return send_file('ventas.pdf', as_attachment=True)
+
+
+
 
 # * Eliminar ventas
 @app.route('/delete_venta/<string:venta_name>')

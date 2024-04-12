@@ -1,7 +1,52 @@
 {% extends "admin/layout.html" %}
 {% block content %}
+<style>
+  #print-header {
+      display: none;
+  }
+  @media print {
+      body * {
+          visibility: hidden;
+      }
+      #print-header, #print-header * {
+          visibility: visible;
+      }
+      #print-header {
+          position: absolute;
+          left: 0;
+          top: 0;
+      }
+  }
+</style>
+
 <div class="container">
-    <table id="example" class="display" style="width:100%">
+  <div id="print-header">
+    <img src="/static/img/descarga.png" alt=""  class="center" style="width: 250px;height:200px; display: block; margin-left: auto; margin-right: auto; ">   
+    <br>
+    <h3 id="time"></h3>
+    <h3>Mecanica Don Julio</h3>
+    <h3>Reporte de los servicios Anuales realizados</h3>
+    <h3>Santa Rosa</h3>
+    <br>
+    <table class="table table-bordered" >
+        <thead >
+            <tr>
+              <th>Fecha</th>
+              <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+          {% for fecha in fechas %}
+          <tr>
+              <td>{{ fecha }}</td>
+              <td>{{ sumas[fecha] }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+    </table>
+</div>  
+
+  <table id="example" class="display" style="width:100%">
         <thead>
             <tr>
                 <th>Fecha</th>
@@ -16,11 +61,22 @@
             </tr>
             {% endfor %}
         </tbody>
+       
     </table>
     <br>
 </div>
 <div class="container">
     <canvas id="myChart"></canvas>
+</div>
+
+<div class="container">
+  <button id="print-button" class="btn-primary" >
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-printer" viewBox="0 0 16 16">
+      <path d="M2.5 8a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1"/>
+      <path d="M5 1a2 2 0 0 0-2 2v2H2a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h1v1a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-1h1a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-1V3a2 2 0 0 0-2-2zM4 3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2H4zm1 5a2 2 0 0 0-2 2v1H2a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v-1a2 2 0 0 0-2-2zm7 2v3a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1"/>
+    </svg>
+    Imprimir 
+    </button>
 </div>
 <script>
     var ctx = document.getElementById('myChart').getContext('2d');
@@ -71,5 +127,21 @@ var myChart = new Chart(ctx, {
     });
 
 </script>
+<script>
+  document.getElementById("print-button").onclick = function() {
+     var printContent = document.getElementById('print-header').innerHTML;
+     var originalContent = document.body.innerHTML;
 
+     document.body.innerHTML = printContent;
+     window.print();
+     document.body.innerHTML = originalContent;
+     
+ }
+ function updateTime() {
+     var date = new Date();
+     var time = date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+     document.getElementById('time').innerHTML = "Documento generado " + time;
+ }
+ setInterval(updateTime, 1000);
+</script>
 {% endblock %}

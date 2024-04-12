@@ -1,11 +1,24 @@
 {% extends "admin/layout.html" %}
 {% block content %}
 <div class="container">
+<form action="/admin/reporte/re_venta" method="get">
+    <br>
+    <label for="nombre" >
+        <h4>Ingrese nombre del trabajador</h4>
+    </label><br>
+    <input type="text" id="vusuario" name="usuario" class="form-control" style="width: 150px;">
+    <br>
+    <input type="submit" value="Filtrar" class="btn btn-primary">
+    <a href="{{ url_for('re_venta') }}" class="btn btn-primary">Reporte de todos los trabajadores</a>
+</form>
+</div>
+<div class="container">
+    
         <table id="myTable" class="table">
             <thead>
                 <tr>
                     <th>
-                        Id Venta
+                        Id servicios
                     </th>
                     <th>
                         Usuario
